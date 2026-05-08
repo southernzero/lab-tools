@@ -1,0 +1,4449 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>연구비 증빙 도우미 | 이차전지소재셀제조 전문인력양성사업</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" defer></script>
+<style>
+  :root {
+    --inha-navy: #003876;
+    --inha-navy-dark: #002855;
+    --inha-navy-light: #1a4f8f;
+    --inha-accent: #f0a500;
+    --bg: #f5f6f9;
+    --card: #ffffff;
+    --border: #e3e6ec;
+    --text: #1a1f2e;
+    --text-muted: #6b7280;
+    --danger: #d93025;
+    --success: #107c41;
+    --warning-bg: #fff8dc;
+    --warning-border: #f0c674;
+    --warning-text: #7a5800;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 56, 118, 0.06);
+    --radius: 10px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: "Pretendard Variable", Pretendard, -apple-system,
+      BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
+      sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: 14px;
+  }
+
+  /* Header */
+  header {
+    background: var(--inha-navy);
+    color: #fff;
+    padding: 18px 24px;
+    box-shadow: 0 2px 8px rgba(0, 56, 118, 0.18);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .brand h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+  .brand p {
+    margin: 2px 0 0;
+    font-size: 12px;
+    opacity: 0.75;
+    font-weight: 400;
+  }
+  .header-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .icon-btn {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: background 0.15s;
+  }
+  .icon-btn:hover {
+    background: rgba(255, 255, 255, 0.22);
+  }
+  .icon-btn:active {
+    transform: translateY(1px);
+  }
+
+  /* Container */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 24px 60px;
+  }
+
+  /* Onboarding banner */
+  .onboarding {
+    background: linear-gradient(135deg, #eef4ff 0%, #f7f1ff 100%);
+    border: 1px solid #d8e2f5;
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 13px;
+    color: #2a3b5f;
+  }
+  .onboarding strong {
+    color: var(--inha-navy);
+  }
+  .onboarding .close-x {
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    color: #5b6a85;
+    line-height: 1;
+    padding: 0 4px;
+  }
+
+  /* Usage report summary */
+  .usage-period {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .usage-period input[type="date"] {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 10px;
+    background: #fff;
+  }
+  .usage-period .quick {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .usage-period .quick button {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+  .usage-period .quick button.active {
+    background: var(--inha-navy);
+    color: #fff;
+    border-color: var(--inha-navy);
+  }
+  .usage-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .usage-summary-grid .stat {
+    background: #fbfcfe;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .usage-summary-grid .stat .label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .usage-summary-grid .stat .value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--inha-navy);
+    letter-spacing: -0.3px;
+  }
+  .usage-summary-grid .stat.total {
+    background: #eef3fb;
+    border-color: #d8e2f5;
+  }
+  .report-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 20px;
+  }
+  .tab {
+    background: transparent;
+    border: none;
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.15s;
+  }
+  .tab:hover {
+    color: var(--inha-navy);
+  }
+  .tab.active {
+    color: var(--inha-navy);
+    border-bottom-color: var(--inha-navy);
+  }
+
+  .tab-panel {
+    display: none;
+  }
+  .tab-panel.active {
+    display: block;
+  }
+
+  /* Section card */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+  }
+  .section h2 {
+    margin: 0 0 14px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--inha-navy);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section h2::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 16px;
+    background: var(--inha-navy);
+    border-radius: 2px;
+  }
+
+  /* Form fields */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .field label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 11px;
+    background: #fff;
+    color: var(--text);
+    transition: border-color 0.15s;
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--inha-navy);
+    box-shadow: 0 0 0 2px rgba(0, 56, 118, 0.12);
+  }
+  .field textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  /* Buttons */
+  .btn {
+    background: var(--inha-navy);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn:hover {
+    background: var(--inha-navy-dark);
+  }
+  .btn:active {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
+  .btn.secondary {
+    background: #fff;
+    color: var(--inha-navy);
+    border: 1px solid var(--inha-navy);
+  }
+  .btn.secondary:hover {
+    background: #eef3fb;
+  }
+  .btn.ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+  .btn.ghost:hover {
+    background: #f5f6f9;
+    color: var(--text);
+  }
+  .btn.danger {
+    background: #fff;
+    color: var(--danger);
+    border: 1px solid #f4c8c4;
+  }
+  .btn.danger:hover {
+    background: #fdf0ef;
+  }
+  .btn.small {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .btn-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* Note box */
+  .note-box {
+    background: var(--warning-bg);
+    border: 1px solid var(--warning-border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--warning-text);
+    font-size: 13px;
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+  .note-box.urgent {
+    background: #ffe9e3;
+    border-color: #f4a899;
+    color: #8a2a14;
+    font-weight: 500;
+  }
+
+  /* Checklist */
+  .progress-wrap {
+    margin: 14px 0 12px;
+  }
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .progress-bar {
+    background: #eef0f4;
+    border-radius: 999px;
+    height: 8px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--inha-navy), var(--inha-navy-light));
+    height: 100%;
+    transition: width 0.25s;
+    border-radius: 999px;
+  }
+
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .check-item {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fbfcfe;
+    transition: all 0.15s;
+    overflow: hidden;
+  }
+  .check-item.unchecked {
+    border-color: #f4c8c4;
+    background: #fff8f7;
+  }
+  .check-item.checked {
+    background: #eef7f1;
+    border-color: #c2e0cd;
+  }
+  .check-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+  }
+  .check-status {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1.5px solid #d4d8e0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: transparent;
+    flex-shrink: 0;
+  }
+  .check-item.checked .check-status {
+    background: var(--success);
+    border-color: var(--success);
+    color: #fff;
+  }
+  .check-item.unchecked .check-status {
+    border-color: #e6a89e;
+  }
+  .check-label {
+    flex: 1;
+    font-size: 14px;
+    user-select: none;
+  }
+  .check-item.unchecked .check-label {
+    color: var(--danger);
+    font-weight: 500;
+  }
+  .check-item.checked .check-label {
+    color: #18603a;
+    font-weight: 500;
+  }
+  .file-btn {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+    background: #fff;
+    color: var(--inha-navy);
+    border: 1px solid var(--inha-navy);
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+  .file-btn:hover {
+    background: #eef3fb;
+  }
+  .file-btn input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .file-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 14px 12px 46px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .file-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px 6px 10px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12.5px;
+  }
+  .file-name {
+    flex: 1;
+    word-break: break-all;
+    color: var(--text);
+  }
+  .file-size {
+    font-size: 11px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .file-list button {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 11px;
+    padding: 3px 7px;
+    cursor: pointer;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .file-list button:hover {
+    border-color: var(--border);
+    background: #f5f6f9;
+    color: var(--text);
+  }
+  .file-list button.del:hover {
+    border-color: #f4c8c4;
+    background: #fdf0ef;
+    color: var(--danger);
+  }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 600px;
+  }
+  th,
+  td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: #f4f6fa;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+  tbody tr:hover {
+    background: #fafbfd;
+  }
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  /* Memo cards */
+  .memo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .memo-card {
+    background: #fbfcfe;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    transition: all 0.15s;
+  }
+  .memo-card:hover {
+    border-color: var(--inha-navy-light);
+    box-shadow: var(--shadow);
+  }
+  .memo-card .m-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .memo-card .m-vendor {
+    font-weight: 700;
+    color: var(--inha-navy);
+    font-size: 14px;
+  }
+  .memo-card .m-amount {
+    font-weight: 700;
+    color: var(--text);
+  }
+  .memo-card .m-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .memo-card .m-memo {
+    font-size: 12px;
+    color: var(--text);
+    background: #fff;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    word-break: break-word;
+  }
+  .memo-card .m-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  /* Modal */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(2px);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-backdrop.show {
+    display: flex;
+  }
+  .modal {
+    background: #fff;
+    border-radius: 12px;
+    max-width: 720px;
+    width: 100%;
+    max-height: 86vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  }
+  .modal-head {
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--inha-navy);
+    color: #fff;
+  }
+  .modal-head h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .modal-head .close-x {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 0 4px;
+  }
+  .modal-body {
+    padding: 20px 22px;
+    overflow-y: auto;
+  }
+  .modal-foot {
+    padding: 14px 22px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .help-list {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .help-list li {
+    margin-bottom: 6px;
+  }
+  .help-contact {
+    margin-top: 16px;
+    background: #eef3fb;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+  .help-contact strong {
+    color: var(--inha-navy);
+  }
+
+  /* Mail textarea */
+  .mail-preview {
+    width: 100%;
+    min-height: 320px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: "Pretendard Variable", Pretendard, -apple-system,
+      "Apple SD Gothic Neo", "Noto Sans KR", monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    background: #fafbfd;
+    resize: vertical;
+    white-space: pre-wrap;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--inha-navy);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 200;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .toast.danger {
+    background: var(--danger);
+  }
+  .toast.success {
+    background: var(--success);
+  }
+
+  /* Search bar */
+  .search-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .search-bar input {
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 11px;
+    background: #fff;
+  }
+  .search-bar input:focus {
+    outline: none;
+    border-color: var(--inha-navy);
+    box-shadow: 0 0 0 2px rgba(0, 56, 118, 0.12);
+  }
+
+  /* Analysis section */
+  .muted-note {
+    margin: -4px 0 14px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+  .analysis-summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 14px 0 10px;
+    padding: 10px 14px;
+    background: #eef3fb;
+    border: 1px solid #d8e2f5;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #2a3b5f;
+  }
+  .analysis-summary strong {
+    color: var(--inha-navy);
+    font-size: 14px;
+  }
+  .analysis-pages-hint {
+    margin-left: auto;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  #analysisSheetIndicator {
+    margin: 6px 0 8px;
+  }
+  .ana-sheet-empty {
+    padding: 8px 12px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+  .ana-sheet-have {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #eef7f1;
+    border: 1px solid #c2e0cd;
+    border-radius: 8px;
+    font-size: 12.5px;
+    flex-wrap: wrap;
+  }
+  .ana-sheet-have .muted {
+    color: var(--text-muted);
+  }
+  .ana-sheet-have button {
+    margin-left: auto;
+  }
+  .ana-sheet-have button + button {
+    margin-left: 0;
+  }
+
+  .analysis-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .analysis-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fbfcfe;
+    overflow: hidden;
+  }
+  .ana-card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #eef3fb;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    flex-wrap: wrap;
+  }
+  .ana-date {
+    font-weight: 700;
+    color: var(--inha-navy);
+    min-width: 90px;
+  }
+  .ana-type {
+    flex: 1;
+    font-weight: 500;
+    color: var(--text);
+    min-width: 160px;
+  }
+  .ana-amount {
+    font-weight: 700;
+    color: var(--text);
+  }
+  .ana-card-meta {
+    padding: 6px 14px;
+    background: #fff;
+    border-bottom: 1px dashed var(--border);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .ana-card-slots {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .ana-slot {
+    padding: 10px 14px;
+    border-right: 1px solid var(--border);
+    background: #fff;
+    min-height: 80px;
+  }
+  .ana-slot:last-child {
+    border-right: none;
+  }
+  .ana-slot.empty {
+    background: #fff8f7;
+  }
+  .ana-slot-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--inha-navy);
+  }
+  .ana-slot.empty .ana-slot-head {
+    color: var(--danger);
+  }
+  .ana-slot-head .file-btn {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+  .ana-slot .file-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .ana-slot .file-list li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    background: #fbfcfe;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 11.5px;
+  }
+  @media (max-width: 720px) {
+    .ana-card-slots {
+      grid-template-columns: 1fr;
+    }
+    .ana-slot {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    .ana-slot:last-child {
+      border-bottom: none;
+    }
+  }
+
+  /* Pill */
+  .pill {
+    display: inline-block;
+    background: #eef3fb;
+    color: var(--inha-navy);
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .right-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--border);
+  }
+
+  /* Responsive */
+  @media (max-width: 720px) {
+    .header-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .header-actions {
+      align-self: flex-end;
+    }
+    main {
+      padding: 16px;
+    }
+    .section {
+      padding: 16px;
+    }
+    .tab {
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <h1>연구비 증빙 도우미</h1>
+      <p>인하대학교 이차전지소재셀제조 전문인력양성사업</p>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="btnExport" title="데이터 내보내기 (JSON)">⤓</button>
+      <button class="icon-btn" id="btnImport" title="데이터 불러오기 (JSON)">⤴</button>
+      <button class="icon-btn" id="btnHelp" title="도움말">?</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="onboarding" id="onboarding">
+    <div>
+      이 도구는 <strong>인하대 이차전지소재셀제조 전문인력양성사업</strong> 연구비 증빙을
+      정리·제출하고, <strong>사용내역을 박남영T께 정기 보고</strong>하기 위한 것입니다.
+      모든 데이터·첨부파일은 <strong>이 브라우저에만 저장</strong>되며 서버로 전송되지 않습니다.
+      <br />· 증빙 체크리스트 탭에서 항목별 파일 첨부 → 산학협력단 제출 PDF 자동 생성
+      <br />· 사용내역 탭에서 기간별 보고서 → 박남영T께 메일 또는 클립보드로 전달
+    </div>
+    <button class="close-x" id="closeOnboarding" title="닫기">×</button>
+  </div>
+
+
+  <!-- Tabs -->
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-tab="checklist" role="tab">증빙 체크리스트</button>
+    <button class="tab" data-tab="usage" role="tab">사용내역</button>
+    <button class="tab" data-tab="memo" role="tab">증빙 메모</button>
+  </div>
+
+  <!-- TAB 1: Checklist -->
+  <div class="tab-panel active" id="tab-checklist">
+
+    <div class="section">
+      <h2>1. 세목 선택</h2>
+      <div class="field">
+        <label for="categorySelect">세목</label>
+        <select id="categorySelect">
+          <option value="">— 세목을 선택하세요 —</option>
+        </select>
+      </div>
+      <div id="categoryNote"></div>
+    </div>
+
+    <div class="section" id="checklistSection" style="display:none;">
+      <h2>2. 필요 증빙 체크</h2>
+      <div class="progress-wrap">
+        <div class="progress-info">
+          <span id="progressText">0 / 0 항목 준비 완료</span>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      </div>
+      <div class="checklist" id="checklist"></div>
+
+      <div class="right-actions">
+        <button class="btn ghost small" id="resetChecklist">전체 파일 삭제</button>
+        <button class="btn secondary" id="openMail">📄 산학협력단 제출 PDF 생성</button>
+      </div>
+    </div>
+
+    <div class="section" id="analysisSection" style="display:none;">
+      <h2>분석 내역 입력 (시험분석 결과서)</h2>
+      <p class="muted-note">
+        파일 선택 창에서 <strong>엑셀(.xlsx)과 PDF를 한 번에 선택</strong>(Ctrl/⌘ + 클릭)하세요.
+        <br />· <strong>엑셀</strong> → 분석 행 추출 (단가·VAT를 정확히 읽음)
+        <br />· <strong>PDF</strong> → 최종 PDF에 원본 그대로 병합 (거래명세서 겸용)
+        <br />· 둘 중 하나만 올려도 동작합니다 (엑셀만이면 자동 변환 시도, PDF만이면 텍스트 추출 시도).
+      </p>
+      <div id="analysisSheetIndicator"></div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="anaDate">분석일자</label>
+          <input type="date" id="anaDate" />
+        </div>
+        <div class="field" style="grid-column: span 2;">
+          <label for="anaType">분석 항목</label>
+          <input type="text" id="anaType" placeholder="예: SEM 측정 / XRD / TGA" />
+        </div>
+        <div class="field" style="grid-column: span 2;">
+          <label for="anaSample">시료명</label>
+          <input type="text" id="anaSample" placeholder="예: NCM-622 분말 (Lot#A23-15)" />
+        </div>
+        <div class="field">
+          <label for="anaQty">수량</label>
+          <input type="number" id="anaQty" placeholder="1" min="0" step="1" />
+        </div>
+        <div class="field">
+          <label for="anaUnit">단가 (원)</label>
+          <input type="number" id="anaUnit" placeholder="50000" min="0" step="100" />
+        </div>
+        <div class="field">
+          <label for="anaAmount">금액 (원)</label>
+          <input type="number" id="anaAmount" placeholder="자동 계산" min="0" step="100" />
+        </div>
+        <div class="field" style="grid-column: 1 / -1;">
+          <label for="anaMemo">비고</label>
+          <input type="text" id="anaMemo" placeholder="예: 의뢰번호 / 추가 메모" />
+        </div>
+      </div>
+      <div class="btn-group">
+        <button class="btn" id="addAnalysis">+ 행 추가</button>
+        <button class="btn secondary" id="anaImportBtn">📂 엑셀 + PDF 함께 불러오기</button>
+        <button class="btn ghost small" id="clearAnalyses">전체 삭제</button>
+        <input type="file" id="anaImportFile" accept=".xlsx,.xls,.csv,.pdf,application/pdf" multiple style="display:none;" />
+      </div>
+
+      <div class="analysis-summary">
+        <span>총 <strong id="analysisCount">0</strong>건</span>
+        <span>·</span>
+        <span>합계 <strong id="analysisSum">0원</strong></span>
+        <span class="analysis-pages-hint" id="analysisPagesHint"></span>
+      </div>
+
+      <div class="analysis-cards" id="analysisCards"></div>
+    </div>
+
+  </div>
+
+  <!-- TAB 2: Usage -->
+  <div class="tab-panel" id="tab-usage">
+
+    <div class="section">
+      <h2>기간 보고서 (박남영T께 정기 제출용)</h2>
+      <div class="usage-period">
+        <div class="quick">
+          <button data-period="thisMonth" class="active">이번 달</button>
+          <button data-period="lastMonth">지난 달</button>
+          <button data-period="thisYear">올해</button>
+          <button data-period="all">전체</button>
+        </div>
+        <span style="color:var(--text-muted); font-size:12px;">·</span>
+        <input type="date" id="periodFrom" />
+        <span style="color:var(--text-muted);">~</span>
+        <input type="date" id="periodTo" />
+      </div>
+
+      <div class="usage-summary-grid">
+        <div class="stat">
+          <span class="label">기간 건수</span>
+          <span class="value" id="summaryCount">0건</span>
+        </div>
+        <div class="stat">
+          <span class="label">연구재료비</span>
+          <span class="value" id="summaryMaterial">0원</span>
+        </div>
+        <div class="stat">
+          <span class="label">연구활동비</span>
+          <span class="value" id="summaryActivity">0원</span>
+        </div>
+        <div class="stat total">
+          <span class="label">총 합계</span>
+          <span class="value" id="summaryTotal">0원</span>
+        </div>
+      </div>
+
+      <div class="report-actions">
+        <button class="btn secondary" id="copyUsageReport">📋 보고서 복사</button>
+        <button class="btn secondary" id="downloadUsageCsv">⬇ CSV 다운로드</button>
+        <button class="btn" id="mailUsageReport">📧 박남영T께 메일</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>사용 내역 추가</h2>
+      <div class="field-row">
+        <div class="field">
+          <label for="useDate">날짜</label>
+          <input type="date" id="useDate" />
+        </div>
+        <div class="field">
+          <label for="useCategory">세목</label>
+          <select id="useCategory">
+            <option value="">— 선택 —</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="useAmount">금액 (원)</label>
+          <input type="number" id="useAmount" placeholder="예: 350000" min="0" step="100" />
+        </div>
+        <div class="field">
+          <label for="useMemo">메모</label>
+          <input type="text" id="useMemo" placeholder="예: 셀 분리막 구매" />
+        </div>
+      </div>
+      <div class="btn-group">
+        <button class="btn" id="addUsage">+ 추가</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>사용 내역 목록 <span id="usageListHint" style="font-size:12px;color:var(--text-muted);font-weight:500;"></span></h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:110px;">날짜</th>
+              <th>세목</th>
+              <th style="width:120px; text-align:right;">금액</th>
+              <th>메모</th>
+              <th style="width:70px;"></th>
+            </tr>
+          </thead>
+          <tbody id="usageTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Memo -->
+  <div class="tab-panel" id="tab-memo">
+    <div class="section">
+      <h2>증빙 메모 추가</h2>
+      <div class="field-row">
+        <div class="field">
+          <label for="memoDate">날짜</label>
+          <input type="date" id="memoDate" />
+        </div>
+        <div class="field">
+          <label for="memoVendor">업체명</label>
+          <input type="text" id="memoVendor" placeholder="예: ㈜한국전지" />
+        </div>
+        <div class="field">
+          <label for="memoAmount">금액 (원)</label>
+          <input type="number" id="memoAmount" placeholder="예: 250000" min="0" step="100" />
+        </div>
+        <div class="field">
+          <label for="memoCardLast4">카드 끝 4자리</label>
+          <input type="text" id="memoCardLast4" placeholder="예: 1234" maxlength="4" />
+        </div>
+        <div class="field">
+          <label for="memoApproval">승인번호</label>
+          <input type="text" id="memoApproval" placeholder="예: 12345678" />
+        </div>
+        <div class="field" style="grid-column: 1 / -1;">
+          <label for="memoNote">메모</label>
+          <textarea id="memoNote" placeholder="예: 분석 의뢰 - SEM 측정"></textarea>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button class="btn" id="addMemo">+ 메모 추가</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>증빙 메모 보관함</h2>
+      <div class="search-bar">
+        <input type="text" id="memoSearch" placeholder="🔍 업체명 / 메모 / 승인번호로 검색" />
+      </div>
+      <div class="memo-grid" id="memoGrid"></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Mail Modal -->
+<div class="modal-backdrop" id="mailModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>산학협력단 제출용 PDF 생성 (A4 출력)</h3>
+      <button class="close-x" data-close="mailModal">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="note-box" style="margin-bottom:14px;">
+        💡 모든 첨부파일을 <strong>A4 한 권의 PDF</strong>로 합쳐 출력 가능하게 만듭니다.
+        <br />· <strong>사진</strong> 첨부는 한 페이지에 <strong>6장씩(2×3 그리드)</strong> 자동 배치됩니다.
+        <br />· <strong>PDF</strong> 첨부는 원본 페이지 그대로 병합됩니다.
+        <br />· 표지에는 세목·정산일자·정산금액·사유·연구원/책임교수·항목별 첨부 체크표가 들어갑니다.
+        <br />· <strong>정산일자·정산금액</strong>을 입력하면 사용내역 탭과 예산 잔액에 자동 기록됩니다.
+        <br />· <strong>분석비</strong>는 시험분석 결과서의 총액(VAT 포함)이 정산 금액에 자동 입력됩니다.
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="mailUserName">연구원 이름 (학생)</label>
+          <input type="text" id="mailUserName" placeholder="예: 홍길동" />
+        </div>
+        <div class="field">
+          <label for="mailProfessor">교수명</label>
+          <input
+            type="text"
+            id="mailProfessor"
+            value="박남영"
+            readonly
+            style="background:#eef3fb; color:var(--inha-navy); font-weight:600;"
+          />
+        </div>
+        <div class="field">
+          <label for="mailDate">정산 일자</label>
+          <input type="date" id="mailDate" />
+        </div>
+        <div class="field">
+          <label for="mailInvoiceDate">세금계산서 발행일
+            <span id="mailInvoiceDateAuto" style="font-size:11px; color:var(--text-muted); font-weight:500;"></span>
+          </label>
+          <input type="date" id="mailInvoiceDate" />
+        </div>
+        <div class="field">
+          <label for="mailAmount">정산 금액 (원)
+            <span id="mailAmountAuto" style="font-size:11px; color:var(--text-muted); font-weight:500;"></span>
+          </label>
+          <input type="number" id="mailAmount" placeholder="예: 350000" min="0" />
+        </div>
+        <div class="field" style="grid-column: 1 / -1;">
+          <label for="mailReason">사유 / 내용</label>
+          <textarea id="mailReason" placeholder="예: 4월 분석료 정산"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" data-close="mailModal">닫기</button>
+      <button class="btn secondary" id="previewPdf">🖨 미리보기 + 인쇄</button>
+      <button class="btn" id="downloadPdf">⬇ PDF 다운로드</button>
+    </div>
+  </div>
+</div>
+
+<!-- Help Modal -->
+<div class="modal-backdrop" id="helpModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>매뉴얼 공통 주의사항</h3>
+      <button class="close-x" data-close="helpModal">×</button>
+    </div>
+    <div class="modal-body">
+      <ul class="help-list">
+        <li>모든 연구비 사용 시 <strong>당해연도 연구비</strong>를 체크하세요. (계속비 사용 금지)</li>
+        <li>
+          <strong>세금계산서 처리 흐름:</strong> 연구활동 → 연구비신청 → 신청서 및 증빙서류 검토 및 날인(전혜민T) → 산학협력단 연구지원팀 제출
+        </li>
+        <li>
+          <strong>카드 결제 정산 주기:</strong> 1일~말일 결제건은 <strong>익월 10일까지</strong> 정산 신청
+          <br><span style="color:var(--text-muted);">예: 3월 결제 → 4월 10일까지</span>
+        </li>
+        <li>연구비 신청은 <strong>각 방 대표학생 및 교수님 계정</strong>으로만 가능합니다.</li>
+        <li>회의비는 <strong>사전 신청 필수</strong>이며 1인 단가 초과는 불가합니다.</li>
+        <li>국외출장은 사업계획서에 출장계획서를 제출한 건에 한해 지원됩니다.</li>
+        <li>300만원 이상 재료비는 <strong>직접구매 불가</strong>, 서브원 중앙구매 원칙입니다.</li>
+      </ul>
+
+      <div class="help-contact">
+        <strong>담당자 안내</strong><br />
+        전혜민 선생님 · 2남316A · 032-860-8929 · jjhm@inha.ac.kr
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" data-close="helpModal">확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden file input for import -->
+<input type="file" id="importFile" accept="application/json" style="display:none" />
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+ *  연구비 증빙 도우미
+ *  - 단일 HTML, localStorage 기반
+ * ============================================================ */
+
+const KIND = {
+  material: { key: "material", label: "연구재료비" },
+  activity: { key: "activity", label: "연구활동비" }
+};
+
+const REQUIREMENTS = {
+  "재료비_직접구매_세금계산서": {
+    label: "재료비 - 직접구매 (세금계산서)",
+    kind: "material",
+    note: "300만원 이상은 직접구매 불가. 서브원 중앙구매 원칙.",
+    items: [
+      "견적서",
+      "세금계산서",
+      "거래명세서",
+      "물품 사진",
+      "업체 통장사본",
+      "업체 사업자등록증"
+    ]
+  },
+  "재료비_직접구매_카드": {
+    label: "재료비 - 직접구매 (카드결제)",
+    kind: "material",
+    note: "300만원 이상은 직접구매 불가. 영수증은 카드번호 및 승인번호가 나온 매출전표여야 함.",
+    items: [
+      "견적서",
+      "카드 영수증 (매출전표 - 카드번호/승인번호 포함)",
+      "거래명세서",
+      "물품 사진"
+    ]
+  },
+  "회의비": {
+    label: "연구활동비 - 회의비",
+    kind: "activity",
+    note: "⚠️ 회의비 사용 전 포털시스템(연구비집행)에서 사전신청 필수! 1인 단가 초과 금지. 외부인원 및 과제 참여연구원 포함 필수. 주류성 음식점(포차/주점/이자카야 등) 사용 불가. 오후 10시 이후 결제 지양.",
+    items: [
+      "카드 영수증 (영수증 첨부지 활용 - 내역별 고유 바코드 존재)",
+      "회의비 사전 신청서",
+      "회의비 사용 내역서"
+    ]
+  },
+  "국내출장비": {
+    label: "연구활동비 - 국내출장비 / 학회등록비",
+    kind: "activity",
+    note: "출장보고서는 시스템에 입력하면 자동생성됨.",
+    items: [
+      "학회 브로셔 (포스터 등)",
+      "제출 논문 (발표 포스터 등)",
+      "참가확인증 (또는 명찰 실물 사진)",
+      "출장보고서",
+      "교통수단 결제 영수증",
+      "교통수단 실제 탑승권"
+    ]
+  },
+  "국외출장비": {
+    label: "연구활동비 - 국외출장비",
+    kind: "activity",
+    note: "⚠️ 사업계획서 작성 시 국외출장계획서 제출한 출장만 지원 가능!",
+    items: [
+      "학회 브로셔 (포스터 등)",
+      "제출 논문 (발표 포스터 등)",
+      "참가확인증 (또는 명찰 실물 사진)",
+      "출장보고서",
+      "교통수단 결제 영수증",
+      "교통수단 실제 탑승권",
+      "연차보고서 제출용 추가 작성 (한글 파일)"
+    ]
+  },
+  "분석비": {
+    label: "연구활동비 - 분석비",
+    kind: "activity",
+    hasAnalysisDetails: true,
+    note: "혁신법 개정으로 분석의뢰서 필수. 시험분석 결과서가 거래명세서를 겸하므로 별도 거래명세서는 필요 없습니다. 영수증/세금계산서만 월 단위로 1회 첨부하고, 분석의뢰서·결과데이터는 분석 행마다 따로 첨부합니다 (엑셀 결과서를 먼저 불러온 뒤 각 행 카드에서 업로드).",
+    // 월 단위로 묶이는 증빙 (체크리스트에 1회 첨부)
+    items: [
+      "영수증 (또는 세금계산서)"
+    ],
+    // 분석 행마다 따로 첨부하는 증빙
+    perAnalysisItems: [
+      { key: "request", label: "분석의뢰서" },
+      { key: "result", label: "결과데이터" }
+    ]
+  }
+};
+
+const LS_KEYS = {
+  usage: "reh_usage",
+  memos: "reh_memos",
+  analyses: "reh_analyses",
+  user: "reh_user",
+  onboarding: "reh_onboarding_dismissed"
+};
+
+/* ---------- helpers ---------- */
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+const fmt = (n) => {
+  const x = Number(n) || 0;
+  return x.toLocaleString("ko-KR") + "원";
+};
+const escapeHTML = (s) =>
+  String(s ?? "").replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
+  );
+
+const todayISO = () => {
+  const d = new Date();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${m}-${day}`;
+};
+
+const loadJSON = (key, fallback) => {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+};
+const saveJSON = (key, val) => localStorage.setItem(key, JSON.stringify(val));
+
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+const showToast = (msg, type = "") => {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.className = "toast show" + (type ? " " + type : "");
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => {
+    t.classList.remove("show");
+  }, 2000);
+};
+
+/* ---------- state ---------- */
+let state = {
+  usage: loadJSON(LS_KEYS.usage, []),
+  memos: loadJSON(LS_KEYS.memos, []),
+  // analyses: { [categoryKey]: [{ id, date, type, sample, qty, unitPrice, amount, memo }, ...] }
+  analyses: loadJSON(LS_KEYS.analyses, {}),
+  // attachments: { [categoryKey]: { [itemIdx]: [{id, name, size, type, addedAt}, ...] } }
+  attachments: {},
+  user: loadJSON(LS_KEYS.user, { name: "", lab: "" })
+};
+
+/* ---------- IndexedDB (file blobs) ---------- */
+const DB_NAME = "reh_files_db";
+const DB_VERSION = 1;
+const STORE = "files";
+let _dbPromise = null;
+
+function openDB() {
+  if (_dbPromise) return _dbPromise;
+  _dbPromise = new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE)) {
+        const os = db.createObjectStore(STORE, { keyPath: "id", autoIncrement: true });
+        os.createIndex("by_cat", ["categoryKey", "itemIdx"]);
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+  return _dbPromise;
+}
+
+function txStore(mode) {
+  return openDB().then((db) => db.transaction(STORE, mode).objectStore(STORE));
+}
+
+async function dbAddFile(rec) {
+  const os = await txStore("readwrite");
+  return new Promise((resolve, reject) => {
+    const r = os.add(rec);
+    r.onsuccess = () => resolve(r.result);
+    r.onerror = () => reject(r.error);
+  });
+}
+
+async function dbGetFile(id) {
+  const os = await txStore("readonly");
+  return new Promise((resolve, reject) => {
+    const r = os.get(id);
+    r.onsuccess = () => resolve(r.result);
+    r.onerror = () => reject(r.error);
+  });
+}
+
+async function dbDeleteFile(id) {
+  const os = await txStore("readwrite");
+  return new Promise((resolve, reject) => {
+    const r = os.delete(id);
+    r.onsuccess = () => resolve();
+    r.onerror = () => reject(r.error);
+  });
+}
+
+async function dbGetAllFiles() {
+  const os = await txStore("readonly");
+  return new Promise((resolve, reject) => {
+    const r = os.getAll();
+    r.onsuccess = () => resolve(r.result || []);
+    r.onerror = () => reject(r.error);
+  });
+}
+
+async function rebuildAttachmentsIndex() {
+  const all = await dbGetAllFiles();
+  const idx = {};
+  for (const f of all) {
+    idx[f.categoryKey] ??= { byAnalysis: {} };
+    const meta = {
+      id: f.id,
+      name: f.name,
+      size: f.size,
+      type: f.type,
+      addedAt: f.addedAt
+    };
+    if (f.scope === "analysisSheet") {
+      const cur = idx[f.categoryKey].analysisSheet;
+      if (!cur || (f.addedAt || 0) > (cur.addedAt || 0)) {
+        idx[f.categoryKey].analysisSheet = meta;
+      }
+    } else if (f.scope === "analysisExcel") {
+      const cur = idx[f.categoryKey].analysisExcel;
+      if (!cur || (f.addedAt || 0) > (cur.addedAt || 0)) {
+        idx[f.categoryKey].analysisExcel = meta;
+      }
+    } else if (f.scope === "analysis") {
+      idx[f.categoryKey].byAnalysis[f.analysisId] ??= {
+        request: [],
+        result: []
+      };
+      const slot = f.slot === "result" ? "result" : "request";
+      idx[f.categoryKey].byAnalysis[f.analysisId][slot].push(meta);
+    } else {
+      // monthly (기존 레코드는 scope 없음 → monthly로 취급)
+      idx[f.categoryKey][f.itemIdx] ??= [];
+      idx[f.categoryKey][f.itemIdx].push(meta);
+    }
+  }
+  // 정렬
+  for (const cat of Object.values(idx)) {
+    for (const [k, v] of Object.entries(cat)) {
+      if (k === "byAnalysis") {
+        for (const slots of Object.values(v)) {
+          slots.request.sort((a, b) => (a.addedAt || 0) - (b.addedAt || 0));
+          slots.result.sort((a, b) => (a.addedAt || 0) - (b.addedAt || 0));
+        }
+      } else if (Array.isArray(v)) {
+        v.sort((a, b) => (a.addedAt || 0) - (b.addedAt || 0));
+      }
+    }
+  }
+  state.attachments = idx;
+}
+
+function attachmentsForAnalysis(catKey, anaId, slot) {
+  return state.attachments[catKey]?.byAnalysis?.[anaId]?.[slot] || [];
+}
+
+function humanSize(bytes) {
+  if (!bytes) return "0 B";
+  const u = ["B", "KB", "MB", "GB"];
+  let i = 0;
+  let n = bytes;
+  while (n >= 1024 && i < u.length - 1) {
+    n /= 1024;
+    i++;
+  }
+  return n.toFixed(n < 10 && i > 0 ? 1 : 0) + " " + u[i];
+}
+
+let currentCategory = "";
+let mailSessionAdded = false; // 한 번의 모달 세션에서 사용내역 중복 추가 방지
+
+const FIXED_PROFESSOR_NAME = "박남영";
+
+/* ---------- init: populate selects ---------- */
+function populateCategorySelects() {
+  const opts = Object.entries(REQUIREMENTS)
+    .map(([k, v]) => `<option value="${k}">${escapeHTML(v.label)}</option>`)
+    .join("");
+  $("#categorySelect").insertAdjacentHTML("beforeend", opts);
+  $("#useCategory").insertAdjacentHTML("beforeend", opts);
+}
+
+/* ---------- onboarding ---------- */
+function initOnboarding() {
+  if (loadJSON(LS_KEYS.onboarding, false)) {
+    $("#onboarding").style.display = "none";
+  }
+  $("#closeOnboarding").addEventListener("click", () => {
+    $("#onboarding").style.display = "none";
+    saveJSON(LS_KEYS.onboarding, true);
+  });
+}
+
+/* ---------- tabs ---------- */
+function initTabs() {
+  $$(".tab").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      $$(".tab").forEach((b) => b.classList.remove("active"));
+      $$(".tab-panel").forEach((p) => p.classList.remove("active"));
+      btn.classList.add("active");
+      $("#tab-" + btn.dataset.tab).classList.add("active");
+    });
+  });
+}
+
+function categoryKindOf(catKey) {
+  return REQUIREMENTS[catKey]?.kind || null;
+}
+
+/* ---------- checklist ---------- */
+function initChecklist() {
+  $("#categorySelect").addEventListener("change", (e) => {
+    currentCategory = e.target.value;
+    renderChecklist();
+  });
+  $("#resetChecklist").addEventListener("click", async () => {
+    if (!currentCategory) return;
+    const cur = state.attachments[currentCategory] || {};
+    let monthlyCount = 0;
+    let analysisCount = 0;
+    let sheetCount = 0;
+    for (const [k, v] of Object.entries(cur)) {
+      if (k === "byAnalysis") {
+        for (const slots of Object.values(v)) {
+          analysisCount += (slots.request || []).length + (slots.result || []).length;
+        }
+      } else if (k === "analysisSheet" || k === "analysisExcel") {
+        if (v) sheetCount += 1;
+      } else if (Array.isArray(v)) {
+        monthlyCount += v.length;
+      }
+    }
+    const total = monthlyCount + analysisCount + sheetCount;
+    if (total === 0) return showToast("삭제할 파일이 없습니다.");
+    if (!confirm(`이 세목에 첨부된 모든 파일(${total}개)을 삭제할까요?`)) return;
+    for (const [k, v] of Object.entries(cur)) {
+      if (k === "byAnalysis") {
+        for (const slots of Object.values(v)) {
+          for (const meta of slots.request || []) await dbDeleteFile(meta.id);
+          for (const meta of slots.result || []) await dbDeleteFile(meta.id);
+        }
+      } else if (k === "analysisSheet" || k === "analysisExcel") {
+        if (v) await dbDeleteFile(v.id);
+      } else if (Array.isArray(v)) {
+        for (const meta of v) await dbDeleteFile(meta.id);
+      }
+    }
+    await rebuildAttachmentsIndex();
+    renderChecklist();
+    showToast("모든 파일을 삭제했습니다.", "success");
+  });
+  $("#openMail").addEventListener("click", openMailModal);
+}
+
+function attachmentsFor(catKey, idx) {
+  return state.attachments[catKey]?.[idx] || [];
+}
+
+function renderChecklist() {
+  const noteWrap = $("#categoryNote");
+  const section = $("#checklistSection");
+  const analysisSec = $("#analysisSection");
+
+  if (!currentCategory) {
+    noteWrap.innerHTML = "";
+    section.style.display = "none";
+    if (analysisSec) analysisSec.style.display = "none";
+    return;
+  }
+
+  const cat = REQUIREMENTS[currentCategory];
+
+  const isUrgent = cat.note && cat.note.includes("⚠");
+  noteWrap.innerHTML = `<div class="note-box ${isUrgent ? "urgent" : ""}">${escapeHTML(cat.note)}</div>`;
+
+  // 분석 내역 입력 섹션 (분석비 등 hasAnalysisDetails 카테고리)
+  if (cat.hasAnalysisDetails) {
+    analysisSec.style.display = "block";
+    renderAnalysisTable();
+    renderAnalysisSheetIndicator();
+  } else {
+    analysisSec.style.display = "none";
+  }
+
+  section.style.display = "block";
+  $("#checklist").innerHTML = cat.items
+    .map((item, idx) => {
+      const files = attachmentsFor(currentCategory, idx);
+      const isChecked = files.length > 0;
+      return `
+        <div class="check-item ${isChecked ? "checked" : "unchecked"}" data-idx="${idx}">
+          <div class="check-head">
+            <span class="check-status">${isChecked ? "✓" : ""}</span>
+            <span class="check-label">${escapeHTML(item)}${files.length > 1 ? ` <span class="pill">${files.length}</span>` : ""}</span>
+            <label class="file-btn">
+              + 파일 첨부
+              <input type="file" multiple data-upload-idx="${idx}" />
+            </label>
+          </div>
+          ${
+            files.length
+              ? `<ul class="file-list">${files
+                  .map(
+                    (f) => `
+                <li>
+                  <span class="file-name">📎 ${escapeHTML(f.name)}</span>
+                  <span class="file-size">${humanSize(f.size)}</span>
+                  <button data-download-file="${f.id}" title="다운로드">↓</button>
+                  <button class="del" data-del-file="${f.id}" title="삭제">×</button>
+                </li>`
+                  )
+                  .join("")}</ul>`
+              : ""
+          }
+        </div>`;
+    })
+    .join("");
+
+  $$("#checklist input[type=file]").forEach((inp) => {
+    inp.addEventListener("change", (e) => handleFileUpload(e, Number(inp.dataset.uploadIdx)));
+  });
+  $$("#checklist [data-download-file]").forEach((btn) => {
+    btn.addEventListener("click", () => downloadOneFile(Number(btn.dataset.downloadFile)));
+  });
+  $$("#checklist [data-del-file]").forEach((btn) => {
+    btn.addEventListener("click", () => removeFile(Number(btn.dataset.delFile)));
+  });
+
+  const total = cat.items.length;
+  const done = cat.items.reduce(
+    (s, _, i) => s + (attachmentsFor(currentCategory, i).length > 0 ? 1 : 0),
+    0
+  );
+  const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+  $("#progressText").textContent = `${done} / ${total} 항목 첨부 완료`;
+  $("#progressPercent").textContent = pct + "%";
+  $("#progressFill").style.width = pct + "%";
+}
+
+async function handleFileUpload(e, itemIdx) {
+  const files = Array.from(e.target.files || []);
+  if (!files.length) return;
+  try {
+    for (const f of files) {
+      await dbAddFile({
+        categoryKey: currentCategory,
+        itemIdx,
+        name: f.name,
+        size: f.size,
+        type: f.type,
+        blob: f,
+        addedAt: Date.now()
+      });
+    }
+    await rebuildAttachmentsIndex();
+    renderChecklist();
+    showToast(`${files.length}개 파일을 첨부했습니다.`, "success");
+  } catch (err) {
+    console.error(err);
+    showToast("파일 저장 중 오류가 발생했습니다.", "danger");
+  } finally {
+    e.target.value = "";
+  }
+}
+
+async function removeFile(id) {
+  if (!confirm("이 파일을 삭제할까요?")) return;
+  await dbDeleteFile(id);
+  await rebuildAttachmentsIndex();
+  renderChecklist();
+  showToast("파일을 삭제했습니다.");
+}
+
+async function downloadOneFile(id) {
+  const rec = await dbGetFile(id);
+  if (!rec) return showToast("파일을 찾을 수 없습니다.", "danger");
+  const url = URL.createObjectURL(rec.blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = rec.name;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function triggerDownload(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/* ---------- PDF builder (pdf-lib) ---------- */
+const A4_W = 595.28; // pt
+const A4_H = 841.89;
+const KFONT =
+  '"Apple SD Gothic Neo","Malgun Gothic","Pretendard","Noto Sans KR",sans-serif';
+
+function classifyFile(rec) {
+  const t = (rec.type || "").toLowerCase();
+  const ext = (rec.name.split(".").pop() || "").toLowerCase();
+  if (
+    t.startsWith("image/") ||
+    ["jpg", "jpeg", "png", "gif", "webp", "bmp", "heic", "heif"].includes(ext)
+  )
+    return "image";
+  if (t === "application/pdf" || ext === "pdf") return "pdf";
+  return "other";
+}
+
+async function canvasToPngBytes(canvas) {
+  const blob = await new Promise((res) => canvas.toBlob(res, "image/png"));
+  return new Uint8Array(await blob.arrayBuffer());
+}
+
+function wrapText(ctx, text, maxWidth) {
+  if (!text) return [""];
+  const lines = [];
+  let line = "";
+  for (const ch of String(text)) {
+    if (ch === "\n") {
+      lines.push(line);
+      line = "";
+      continue;
+    }
+    const test = line + ch;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = ch;
+    } else {
+      line = test;
+    }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+async function embedAnyImage(pdf, blob) {
+  const t = (blob.type || "").toLowerCase();
+  if (t === "image/jpeg" || t === "image/jpg") {
+    return pdf.embedJpg(new Uint8Array(await blob.arrayBuffer()));
+  }
+  if (t === "image/png") {
+    return pdf.embedPng(new Uint8Array(await blob.arrayBuffer()));
+  }
+  // Fallback: rasterize via canvas (handles webp/gif/heic-where-supported/bmp)
+  const url = URL.createObjectURL(blob);
+  try {
+    const img = await new Promise((res, rej) => {
+      const i = new Image();
+      i.onload = () => res(i);
+      i.onerror = () => rej(new Error("이미지 디코드 실패"));
+      i.src = url;
+    });
+    const MAX = 2400;
+    let w = img.naturalWidth;
+    let h = img.naturalHeight;
+    if (w > MAX || h > MAX) {
+      const r = Math.min(MAX / w, MAX / h);
+      w = Math.round(w * r);
+      h = Math.round(h * r);
+    }
+    const c = document.createElement("canvas");
+    c.width = w;
+    c.height = h;
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, w, h);
+    ctx.drawImage(img, 0, 0, w, h);
+    const jpg = await new Promise((r) => c.toBlob(r, "image/jpeg", 0.9));
+    return pdf.embedJpg(new Uint8Array(await jpg.arrayBuffer()));
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+async function renderCoverCanvas(info) {
+  const SCALE = 2;
+  const W = A4_W * SCALE;
+  const H = A4_H * SCALE;
+  const c = document.createElement("canvas");
+  c.width = W;
+  c.height = H;
+  const ctx = c.getContext("2d");
+
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, W, H);
+
+  // Header band
+  ctx.fillStyle = "#003876";
+  ctx.fillRect(0, 0, W, 110 * SCALE);
+  ctx.fillStyle = "#fff";
+  ctx.textBaseline = "alphabetic";
+  ctx.font = `bold ${28 * SCALE}px ${KFONT}`;
+  ctx.fillText("연구비 증빙 제출 자료", 50 * SCALE, 56 * SCALE);
+  ctx.font = `${13 * SCALE}px ${KFONT}`;
+  ctx.fillText(
+    "인하대학교 이차전지소재셀제조 전문인력양성사업",
+    50 * SCALE,
+    86 * SCALE
+  );
+
+  // Info rows
+  let y = 160 * SCALE;
+  const rowGap = 8 * SCALE;
+  const rows = [
+    ["세목", info.cat.label],
+    ["정산 일자", info.date || "-"],
+    ["세금계산서 발행일", info.invoiceDate || "-"],
+    [
+      "정산 금액",
+      info.amount > 0 ? info.amount.toLocaleString("ko-KR") + "원" : "-"
+    ],
+    ["사유 / 내용", info.reason || "-"],
+    ["연구원", info.userName || "-"],
+    ["책임교수", info.professor || FIXED_PROFESSOR_NAME]
+  ];
+  for (const [label, value] of rows) {
+    ctx.fillStyle = "#6b7280";
+    ctx.font = `${12 * SCALE}px ${KFONT}`;
+    ctx.fillText(label, 50 * SCALE, y);
+    ctx.fillStyle = "#1a1f2e";
+    ctx.font = `bold ${14 * SCALE}px ${KFONT}`;
+    const maxW = W - 230 * SCALE;
+    const lines = wrapText(ctx, value, maxW).slice(0, 3);
+    let yy = y;
+    for (const ln of lines) {
+      ctx.fillText(ln, 180 * SCALE, yy);
+      yy += 20 * SCALE;
+    }
+    y = yy + rowGap;
+  }
+
+  // Items table
+  y += 14 * SCALE;
+  ctx.fillStyle = "#003876";
+  ctx.font = `bold ${15 * SCALE}px ${KFONT}`;
+  ctx.fillText("첨부 증빙 항목", 50 * SCALE, y);
+  y += 12 * SCALE;
+
+  const tableX = 50 * SCALE;
+  const tableW = W - 100 * SCALE;
+  ctx.fillStyle = "#f4f6fa";
+  ctx.fillRect(tableX, y, tableW, 26 * SCALE);
+  ctx.fillStyle = "#6b7280";
+  ctx.font = `bold ${10 * SCALE}px ${KFONT}`;
+  ctx.fillText("상태", tableX + 14 * SCALE, y + 17 * SCALE);
+  ctx.fillText("항목", tableX + 70 * SCALE, y + 17 * SCALE);
+  ctx.textAlign = "right";
+  ctx.fillText("첨부 수", tableX + tableW - 14 * SCALE, y + 17 * SCALE);
+  ctx.textAlign = "left";
+  y += 26 * SCALE;
+
+  // 표지 표 행 구성: 월 단위 항목 + (분석비) 분석별 슬롯 합계
+  const tableRows = info.cat.items.map((name, i) => ({
+    name,
+    count: (info.catFiles[i] || []).length,
+    extra: ""
+  }));
+  if (Array.isArray(info.cat.perAnalysisItems)) {
+    const byAna = info.catFiles.byAnalysis || {};
+    const totalEntries = Object.keys(byAna).length;
+    for (const slot of info.cat.perAnalysisItems) {
+      let count = 0;
+      let withFiles = 0;
+      for (const slots of Object.values(byAna)) {
+        const arr = slots[slot.key] || [];
+        count += arr.length;
+        if (arr.length > 0) withFiles++;
+      }
+      tableRows.push({
+        name: `${slot.label} (분석별)`,
+        count,
+        extra: totalEntries > 0 ? `${withFiles}/${totalEntries}건` : ""
+      });
+    }
+  }
+
+  for (const row of tableRows) {
+    if (row.count > 0) {
+      ctx.fillStyle = "#107c41";
+      ctx.font = `bold ${12 * SCALE}px ${KFONT}`;
+      ctx.fillText("✓", tableX + 18 * SCALE, y + 17 * SCALE);
+    } else {
+      ctx.fillStyle = "#9ca3af";
+      ctx.font = `${12 * SCALE}px ${KFONT}`;
+      ctx.fillText("—", tableX + 18 * SCALE, y + 17 * SCALE);
+    }
+    ctx.fillStyle = "#1a1f2e";
+    ctx.font = `${11 * SCALE}px ${KFONT}`;
+    ctx.fillText(row.name, tableX + 70 * SCALE, y + 17 * SCALE);
+    ctx.textAlign = "right";
+    ctx.fillStyle = row.count > 0 ? "#1a1f2e" : "#9ca3af";
+    const rightLabel = row.extra
+      ? `${row.count}개 · ${row.extra}`
+      : `${row.count}개`;
+    ctx.fillText(rightLabel, tableX + tableW - 14 * SCALE, y + 17 * SCALE);
+    ctx.textAlign = "left";
+    y += 24 * SCALE;
+    ctx.strokeStyle = "#e3e6ec";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(tableX, y);
+    ctx.lineTo(tableX + tableW, y);
+    ctx.stroke();
+  }
+
+  // Footer
+  ctx.fillStyle = "#9ca3af";
+  ctx.font = `${10 * SCALE}px ${KFONT}`;
+  ctx.fillText("산학협력단 연구지원팀 제출용", 50 * SCALE, H - 32 * SCALE);
+  ctx.textAlign = "right";
+  ctx.fillText(new Date().toLocaleString("ko-KR"), W - 50 * SCALE, H - 32 * SCALE);
+  ctx.textAlign = "left";
+
+  return c;
+}
+
+function stripExt(filename) {
+  if (!filename) return "";
+  const dot = filename.lastIndexOf(".");
+  return dot > 0 ? filename.slice(0, dot) : filename;
+}
+
+async function renderImageLabelCanvas(text, widthPt, heightPt) {
+  const SCALE = 3;
+  const W = Math.max(40, Math.round(widthPt * SCALE));
+  const H = Math.max(20, Math.round(heightPt * SCALE));
+  const c = document.createElement("canvas");
+  c.width = W;
+  c.height = H;
+  const ctx = c.getContext("2d");
+
+  ctx.fillStyle = "#f4f6fa";
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.fillStyle = "#003876";
+  ctx.font = `bold ${9 * SCALE}px ${KFONT}`;
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "center";
+
+  let display = String(text || "(이름 없음)");
+  const maxW = W - 14 * SCALE;
+  if (ctx.measureText(display).width > maxW) {
+    while (display.length > 1 && ctx.measureText(display + "…").width > maxW) {
+      display = display.slice(0, -1);
+    }
+    display += "…";
+  }
+  ctx.fillText(display, W / 2, H / 2);
+  return c;
+}
+
+async function renderHeaderBandCanvas(itemName, subInfo) {
+  const HEADER_H_PT = 50;
+  const SCALE = 2;
+  const W = A4_W * SCALE;
+  const H = HEADER_H_PT * SCALE;
+  const c = document.createElement("canvas");
+  c.width = W;
+  c.height = H;
+  const ctx = c.getContext("2d");
+
+  ctx.fillStyle = "#003876";
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.fillStyle = "#fff";
+  ctx.textBaseline = "middle";
+  ctx.font = `bold ${17 * SCALE}px ${KFONT}`;
+  ctx.fillText(itemName, 28 * SCALE, H / 2);
+
+  ctx.font = `${11 * SCALE}px ${KFONT}`;
+  ctx.textAlign = "right";
+  ctx.fillStyle = "#cfd9eb";
+  ctx.fillText(subInfo, W - 28 * SCALE, H / 2);
+
+  return { canvas: c, heightPt: HEADER_H_PT };
+}
+
+async function addImageGridPage(pdf, opts) {
+  const page = pdf.addPage([A4_W, A4_H]);
+  const { canvas: hdrCanvas, heightPt: HEADER_H } = await renderHeaderBandCanvas(
+    opts.itemName,
+    `(증빙 ${opts.itemIdx}/${opts.totalCatItems}) · 사진 ${opts.pageIdx}/${opts.totalGridPages}`
+  );
+  const hdrBytes = await canvasToPngBytes(hdrCanvas);
+  const hdrImg = await pdf.embedPng(hdrBytes);
+  page.drawImage(hdrImg, {
+    x: 0,
+    y: A4_H - HEADER_H,
+    width: A4_W,
+    height: HEADER_H
+  });
+
+  const M = 28;
+  const GAP = 8;
+  const COLS = 2;
+  const ROWS = 3;
+  const areaTop = A4_H - HEADER_H - 14;
+  const areaBottom = M;
+  const areaLeft = M;
+  const areaRight = A4_W - M;
+  const areaW = areaRight - areaLeft;
+  const areaH = areaTop - areaBottom;
+  const cellW = (areaW - GAP * (COLS - 1)) / COLS;
+  const cellH = (areaH - GAP * (ROWS - 1)) / ROWS;
+
+  const LABEL_H = 14; // pt
+  const LABEL_GAP = 2;
+
+  for (let i = 0; i < opts.images.length; i++) {
+    const r = Math.floor(i / COLS);
+    const c = i % COLS;
+    const cellLeft = areaLeft + c * (cellW + GAP);
+    const cellBottom = areaTop - cellH - r * (cellH + GAP);
+
+    page.drawRectangle({
+      x: cellLeft,
+      y: cellBottom,
+      width: cellW,
+      height: cellH,
+      borderColor: window.PDFLib.rgb(0.85, 0.87, 0.9),
+      borderWidth: 0.5
+    });
+
+    const imgAreaBottom = cellBottom + LABEL_H + LABEL_GAP;
+    const imgAreaHeight = cellH - LABEL_H - LABEL_GAP;
+
+    try {
+      const img = await embedAnyImage(pdf, opts.images[i].blob);
+      const PAD = 4;
+      const innerW = cellW - PAD * 2;
+      const innerH = imgAreaHeight - PAD * 2;
+      const imgAR = img.width / img.height;
+      const innerAR = innerW / innerH;
+      let w, h;
+      if (imgAR > innerAR) {
+        w = innerW;
+        h = w / imgAR;
+      } else {
+        h = innerH;
+        w = h * imgAR;
+      }
+      const x = cellLeft + (cellW - w) / 2;
+      const y = imgAreaBottom + (imgAreaHeight - h) / 2;
+      page.drawImage(img, { x, y, width: w, height: h });
+    } catch (err) {
+      console.warn("이미지 임베드 실패:", opts.images[i].name, err);
+    }
+
+    // 파일명 라벨 (셀 하단)
+    try {
+      const labelCanvas = await renderImageLabelCanvas(
+        stripExt(opts.images[i].name),
+        cellW,
+        LABEL_H
+      );
+      const labelBytes = await canvasToPngBytes(labelCanvas);
+      const labelImg = await pdf.embedPng(labelBytes);
+      page.drawImage(labelImg, {
+        x: cellLeft,
+        y: cellBottom,
+        width: cellW,
+        height: LABEL_H
+      });
+    } catch (err) {
+      console.warn("라벨 렌더 실패:", opts.images[i].name, err);
+    }
+  }
+}
+
+/* ---------- 분석 내역 (시험분석 결과서) ---------- */
+function getAnalyses(catKey) {
+  return state.analyses[catKey] || [];
+}
+function setAnalyses(catKey, list) {
+  state.analyses[catKey] = list;
+  saveJSON(LS_KEYS.analyses, state.analyses);
+}
+
+function initAnalysis() {
+  $("#anaDate").value = todayISO();
+
+  // 수량·단가 입력 시 금액 자동 계산 (사용자가 금액을 직접 안 적었을 때)
+  const recalcAmount = () => {
+    const q = Number($("#anaQty").value) || 0;
+    const u = Number($("#anaUnit").value) || 0;
+    const cur = $("#anaAmount").value;
+    if (cur === "" || $("#anaAmount").dataset.auto === "1") {
+      if (q > 0 && u > 0) {
+        $("#anaAmount").value = q * u;
+        $("#anaAmount").dataset.auto = "1";
+      } else {
+        $("#anaAmount").value = "";
+      }
+    }
+  };
+  $("#anaQty").addEventListener("input", recalcAmount);
+  $("#anaUnit").addEventListener("input", recalcAmount);
+  $("#anaAmount").addEventListener("input", () => {
+    $("#anaAmount").dataset.auto = "0";
+  });
+
+  $("#addAnalysis").addEventListener("click", () => {
+    if (!currentCategory) return;
+    const date = $("#anaDate").value;
+    const type = $("#anaType").value.trim();
+    const sample = $("#anaSample").value.trim();
+    const qty = Number($("#anaQty").value) || 0;
+    const unitPrice = Number($("#anaUnit").value) || 0;
+    let amount = Number($("#anaAmount").value) || 0;
+    if (amount <= 0 && qty > 0 && unitPrice > 0) amount = qty * unitPrice;
+    const memo = $("#anaMemo").value.trim();
+
+    if (!date) return showToast("분석일자를 입력하세요.", "danger");
+    if (!type) return showToast("분석 항목을 입력하세요.", "danger");
+    if (amount <= 0) return showToast("금액 또는 수량·단가를 입력하세요.", "danger");
+
+    const list = getAnalyses(currentCategory).slice();
+    list.push({
+      id: uid(),
+      date,
+      type,
+      sample,
+      qty,
+      unitPrice,
+      amount,
+      memo
+    });
+    setAnalyses(currentCategory, list);
+
+    // 입력 정리: 항목/시료/수량/단가/금액/비고만 비우고 날짜는 유지
+    ["anaType", "anaSample", "anaQty", "anaUnit", "anaAmount", "anaMemo"].forEach(
+      (id) => ($("#" + id).value = "")
+    );
+    $("#anaAmount").dataset.auto = "1";
+    showToast("분석 내역을 추가했습니다.", "success");
+    renderAnalysisTable();
+  });
+
+  $("#clearAnalyses").addEventListener("click", async () => {
+    if (!currentCategory) return;
+    const list = getAnalyses(currentCategory);
+    if (list.length === 0) return showToast("삭제할 항목이 없습니다.");
+    const byAna = state.attachments[currentCategory]?.byAnalysis || {};
+    let fileCount = 0;
+    for (const slots of Object.values(byAna)) {
+      fileCount += (slots.request || []).length + (slots.result || []).length;
+    }
+    const msg =
+      fileCount > 0
+        ? `분석 내역 ${list.length}건과 첨부 파일 ${fileCount}개를 모두 삭제할까요?`
+        : `이 세목의 분석 내역(${list.length}건)을 모두 삭제할까요?`;
+    if (!confirm(msg)) return;
+    for (const slots of Object.values(byAna)) {
+      for (const meta of slots.request || []) await dbDeleteFile(meta.id);
+      for (const meta of slots.result || []) await dbDeleteFile(meta.id);
+    }
+    setAnalyses(currentCategory, []);
+    await rebuildAttachmentsIndex();
+    renderAnalysisTable();
+    showToast("분석 내역을 모두 삭제했습니다.");
+  });
+
+  // 시험분석 결과서 업로드 (xlsx + pdf 멀티 선택)
+  $("#anaImportBtn").addEventListener("click", () => $("#anaImportFile").click());
+  $("#anaImportFile").addEventListener("change", async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    try {
+      await handleAnalysisSheetMultiUpload(files);
+    } catch (err) {
+      console.error(err);
+      showToast("불러오기 실패: " + err.message, "danger");
+    } finally {
+      e.target.value = "";
+    }
+  });
+
+}
+
+/* ---------- 시험분석 결과서 엑셀 파서 ---------- */
+let _xlsxLoadPromise = null;
+function loadXlsx() {
+  if (window.XLSX) return Promise.resolve(window.XLSX);
+  if (_xlsxLoadPromise) return _xlsxLoadPromise;
+  _xlsxLoadPromise = new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js";
+    s.onload = () => resolve(window.XLSX);
+    s.onerror = () => reject(new Error("SheetJS CDN 로드 실패"));
+    document.head.appendChild(s);
+  });
+  return _xlsxLoadPromise;
+}
+
+let _h2cLoadPromise = null;
+function loadHtml2Canvas() {
+  if (window.html2canvas) return Promise.resolve(window.html2canvas);
+  if (_h2cLoadPromise) return _h2cLoadPromise;
+  _h2cLoadPromise = new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.src =
+      "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+    s.onload = () => resolve(window.html2canvas);
+    s.onerror = () => reject(new Error("html2canvas CDN 로드 실패"));
+    document.head.appendChild(s);
+  });
+  return _h2cLoadPromise;
+}
+
+let _pdfjsLoadPromise = null;
+function loadPdfJs() {
+  if (window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
+  if (_pdfjsLoadPromise) return _pdfjsLoadPromise;
+  _pdfjsLoadPromise = new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.src =
+      "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js";
+    s.onload = () => {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
+      resolve(window.pdfjsLib);
+    };
+    s.onerror = () => reject(new Error("pdf.js CDN 로드 실패"));
+    document.head.appendChild(s);
+  });
+  return _pdfjsLoadPromise;
+}
+
+async function renderPdfFirstPageAsCanvas(blob, scale = 1.5) {
+  await loadPdfJs();
+  const buf = await blob.arrayBuffer();
+  const doc = await window.pdfjsLib.getDocument({ data: buf }).promise;
+  const page = await doc.getPage(1);
+  const viewport = page.getViewport({ scale });
+  const canvas = document.createElement("canvas");
+  canvas.width = viewport.width;
+  canvas.height = viewport.height;
+  const ctx = canvas.getContext("2d");
+  await page.render({ canvasContext: ctx, viewport }).promise;
+  return canvas;
+}
+
+async function blobToImageCanvas(blob) {
+  const url = URL.createObjectURL(blob);
+  try {
+    const img = await new Promise((res, rej) => {
+      const i = new Image();
+      i.onload = () => res(i);
+      i.onerror = () => rej(new Error("이미지 디코드 실패"));
+      i.src = url;
+    });
+    const MAX = 1600;
+    let w = img.naturalWidth;
+    let h = img.naturalHeight;
+    if (w > MAX || h > MAX) {
+      const r = Math.min(MAX / w, MAX / h);
+      w = Math.round(w * r);
+      h = Math.round(h * r);
+    }
+    const c = document.createElement("canvas");
+    c.width = w;
+    c.height = h;
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, w, h);
+    ctx.drawImage(img, 0, 0, w, h);
+    return c;
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+async function fileBlobToCanvas(blob, name) {
+  const t = (blob.type || "").toLowerCase();
+  const ext = (name || "").split(".").pop().toLowerCase();
+  if (
+    t.startsWith("image/") ||
+    ["jpg", "jpeg", "png", "gif", "webp", "bmp"].includes(ext)
+  ) {
+    return await blobToImageCanvas(blob);
+  }
+  if (t === "application/pdf" || ext === "pdf") {
+    return await renderPdfFirstPageAsCanvas(blob, 1.5);
+  }
+  return null;
+}
+
+function _parseNum(v) {
+  if (v == null || v === "") return 0;
+  if (typeof v === "number") return v;
+  const n = parseFloat(String(v).replace(/[,\s원₩]/g, ""));
+  return isNaN(n) ? 0 : n;
+}
+
+function _parseExcelDate(v) {
+  if (v == null || v === "") return "";
+  if (v instanceof Date && !isNaN(v)) {
+    const y = v.getFullYear();
+    const m = String(v.getMonth() + 1).padStart(2, "0");
+    const d = String(v.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
+  if (typeof v === "number") {
+    // Excel serial (days since 1899-12-30)
+    const d = new Date(Math.round((v - 25569) * 86400 * 1000));
+    if (!isNaN(d)) {
+      const y = d.getUTCFullYear();
+      const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+      const dd = String(d.getUTCDate()).padStart(2, "0");
+      return `${y}-${m}-${dd}`;
+    }
+  }
+  const s = String(v).trim();
+  // YY.MM.DD / YYYY.MM.DD / YYYY-MM-DD / YYYY/MM/DD
+  let m = s.match(/(\d{2,4})[.\-/](\d{1,2})[.\-/](\d{1,2})/);
+  if (m) {
+    let y = parseInt(m[1], 10);
+    if (y < 100) y += 2000;
+    return `${y}-${String(parseInt(m[2], 10)).padStart(2, "0")}-${String(
+      parseInt(m[3], 10)
+    ).padStart(2, "0")}`;
+  }
+  // YYYY년 MM월 DD일
+  m = s.match(/(\d{4})\s*년\s*(\d{1,2})\s*월\s*(\d{1,2})\s*일/);
+  if (m) {
+    return `${m[1]}-${String(parseInt(m[2], 10)).padStart(2, "0")}-${String(
+      parseInt(m[3], 10)
+    ).padStart(2, "0")}`;
+  }
+  return "";
+}
+
+const HEADER_KEYWORDS = {
+  field: ["분석분야", "분석분류", "시험분야", "시험분류"],
+  eq: ["분석장비", "분석기기", "장비명", "기기명"],
+  date: ["분석일자", "시험일자", "시험일", "의뢰일자", "분석일", "일자"],
+  sample: ["시료명", "의뢰명", "시료번호", "샘플명"],
+  qty: ["시료수", "수량"],
+  duration: [
+    "시료분석시간",
+    "시료투입시간",
+    "투입시간",
+    "분석시간",
+    "사용시간",
+    "소요시간"
+  ],
+  fee: ["분석료", "시험료", "분석비용", "단가합계", "금액"],
+  unitPrice: ["단가"],
+  vat: ["부가세", "vat", "세액"],
+  memo: ["비고", "메모", "특기"]
+};
+
+function detectHeaderRow(aoa) {
+  const norm = (s) => String(s || "").replace(/\s+/g, "").toLowerCase();
+  for (let r = 0; r < Math.min(aoa.length, 25); r++) {
+    const row = aoa[r] || [];
+    const colMap = {};
+    for (let c = 0; c < row.length; c++) {
+      const cell = norm(row[c]);
+      if (!cell) continue;
+      for (const [key, kws] of Object.entries(HEADER_KEYWORDS)) {
+        if (colMap[key] != null) continue;
+        if (kws.some((kw) => cell.includes(kw.toLowerCase()))) {
+          colMap[key] = c;
+          break;
+        }
+      }
+    }
+    // 최소 분석일자 + (분석료 또는 단가) 조합이면 헤더로 인정
+    if (colMap.date != null && (colMap.fee != null || colMap.unitPrice != null)) {
+      return { headerRow: r, colMap };
+    }
+  }
+  return null;
+}
+
+function parseAnalysisWorkbook(workbook) {
+  const out = [];
+  for (const sheetName of workbook.SheetNames) {
+    const ws = workbook.Sheets[sheetName];
+    const aoa = window.XLSX.utils.sheet_to_json(ws, {
+      header: 1,
+      raw: true,
+      defval: null
+    });
+    const detected = detectHeaderRow(aoa);
+    if (!detected) continue;
+    const { headerRow, colMap } = detected;
+
+    for (let r = headerRow + 1; r < aoa.length; r++) {
+      const row = aoa[r] || [];
+      const fieldText = String(
+        row[colMap.field] ?? row[colMap.eq] ?? ""
+      ).replace(/\s+/g, "");
+      if (/^(합계|소계|총계|total)/i.test(fieldText)) break;
+
+      const date = _parseExcelDate(row[colMap.date]);
+      if (!date) continue; // 날짜 없는 행은 건너뜀 (빈 행/요약 등)
+
+      const fee = colMap.fee != null ? _parseNum(row[colMap.fee]) : 0;
+      const unitPriceCol =
+        colMap.unitPrice != null ? _parseNum(row[colMap.unitPrice]) : 0;
+      const vat = colMap.vat != null ? _parseNum(row[colMap.vat]) : 0;
+      const qty = colMap.qty != null ? _parseNum(row[colMap.qty]) : 0;
+      const duration =
+        colMap.duration != null ? _parseNum(row[colMap.duration]) : 0;
+      const sampleText =
+        colMap.sample != null ? String(row[colMap.sample] || "").trim() : "";
+      const fieldName =
+        colMap.field != null ? String(row[colMap.field] || "").trim() : "";
+      const eqName = colMap.eq != null ? String(row[colMap.eq] || "").trim() : "";
+      const memoCell =
+        colMap.memo != null ? String(row[colMap.memo] || "").trim() : "";
+
+      // 분석 항목: 분야 + 장비명 결합 (둘 다 있으면 "분야 / 장비명")
+      const type = [fieldName, eqName].filter(Boolean).join(" / ");
+
+      // 금액: 분석료 + 부가세 (총액 우선) — 없으면 단가*수량
+      let amount = fee + vat;
+      if (amount <= 0 && unitPriceCol > 0 && qty > 0) {
+        amount = unitPriceCol * qty;
+      }
+      if (amount <= 0 && !type) continue; // 사실상 빈 행
+
+      // 단가: 명시 컬럼 있으면 그것, 없으면 분석료/수량
+      let unitPrice = unitPriceCol;
+      if (unitPrice <= 0 && qty > 0 && fee > 0) {
+        unitPrice = Math.round(fee / qty);
+      }
+
+      const memoParts = [];
+      if (vat > 0)
+        memoParts.push(`VAT ${vat.toLocaleString("ko-KR")}원 포함`);
+      if (duration > 0) memoParts.push(`분석시간 ${duration}h`);
+      if (memoCell) memoParts.push(memoCell);
+
+      out.push({
+        date,
+        type,
+        sample: sampleText,
+        qty,
+        unitPrice,
+        amount,
+        memo: memoParts.join(" · ")
+      });
+    }
+    if (out.length > 0) break; // 첫 번째 인식된 시트만 사용
+  }
+  return out;
+}
+
+async function replaceAnalysisExcel(catKey, file) {
+  // 기존 analysisExcel 레코드 모두 삭제
+  const all = await dbGetAllFiles();
+  for (const f of all) {
+    if (f.categoryKey === catKey && f.scope === "analysisExcel") {
+      await dbDeleteFile(f.id);
+    }
+  }
+  await dbAddFile({
+    categoryKey: catKey,
+    scope: "analysisExcel",
+    itemIdx: -1,
+    name: file.name,
+    size: file.size,
+    type: file.type,
+    blob: file,
+    addedAt: Date.now()
+  });
+}
+
+async function handleAnalysisSheetMultiUpload(files) {
+  if (!currentCategory) {
+    showToast("먼저 분석비 세목을 선택하세요.", "danger");
+    return;
+  }
+  const excelFiles = [];
+  const pdfFiles = [];
+  for (const f of files) {
+    const ext = (f.name || "").split(".").pop().toLowerCase();
+    if (["xlsx", "xls", "csv"].includes(ext)) excelFiles.push(f);
+    else if (ext === "pdf" || (f.type || "").includes("pdf")) pdfFiles.push(f);
+  }
+  if (excelFiles.length === 0 && pdfFiles.length === 0) {
+    showToast("xlsx 또는 pdf 파일을 선택해 주세요.", "danger");
+    return;
+  }
+
+  let rows = [];
+  let extractedFrom = "";
+
+  // 1) 엑셀 우선 — 행 추출 (정확)
+  if (excelFiles.length > 0) {
+    showToast("엑셀에서 행 추출 중…");
+    await loadXlsx();
+    const buf = await excelFiles[0].arrayBuffer();
+    const wb = window.XLSX.read(buf, { type: "array", cellDates: true });
+    rows = parseAnalysisWorkbook(wb);
+    extractedFrom = "엑셀";
+    await replaceAnalysisExcel(currentCategory, excelFiles[0]);
+  } else if (pdfFiles.length > 0) {
+    // 엑셀이 없을 때만 PDF 텍스트 추출 시도 (정확도 낮음)
+    showToast("PDF에서 행 추출 중…");
+    rows = await parsePdfAnalysisSheet(pdfFiles[0]);
+    extractedFrom = "PDF";
+  }
+
+  // 2) 병합용 PDF는 따로 저장 (있으면)
+  if (pdfFiles.length > 0) {
+    await replaceAnalysisSheetFile(currentCategory, pdfFiles[0]);
+  }
+
+  await rebuildAttachmentsIndex();
+
+  // 3) 추출 결과 처리
+  if (rows.length === 0) {
+    renderAnalysisSheetIndicator();
+    renderAnalysisTable();
+    const what =
+      excelFiles.length > 0 && pdfFiles.length > 0
+        ? "엑셀+PDF"
+        : excelFiles.length > 0
+          ? "엑셀"
+          : "PDF";
+    showToast(
+      `📎 ${what} 보관됨 (헤더 자동 인식 실패 — 분석 행은 직접 입력해 주세요)`,
+      "danger"
+    );
+    return;
+  }
+
+  const sum = rows.reduce((s, r) => s + (Number(r.amount) || 0), 0);
+  const existing = getAnalyses(currentCategory).length;
+  const ok = confirm(
+    `📊 ${extractedFrom}에서 ${rows.length}건의 분석 내역을 추출했습니다.\n` +
+      `합계: ${sum.toLocaleString("ko-KR")}원\n\n` +
+      (pdfFiles.length > 0
+        ? `📎 PDF는 최종 PDF에 그대로 병합됩니다.\n\n`
+        : "") +
+      (existing > 0
+        ? `현재 입력된 ${existing}건에 추가됩니다.\n(교체하려면 취소 후 ‘전체 삭제’ 먼저 실행)\n\n`
+        : "") +
+      `계속하시겠습니까?`
+  );
+  if (!ok) {
+    renderAnalysisSheetIndicator();
+    renderAnalysisTable();
+    return;
+  }
+
+  const list = getAnalyses(currentCategory).slice();
+  for (const r of rows) list.push({ id: uid(), ...r });
+  setAnalyses(currentCategory, list);
+  renderAnalysisSheetIndicator();
+  renderAnalysisTable();
+
+  const tail = pdfFiles.length > 0 ? " · 📎 PDF 병합용 보관됨" : "";
+  showToast(
+    `✅ ${rows.length}건 추가됨 (${extractedFrom} 합계 ${sum.toLocaleString("ko-KR")}원)${tail}`,
+    "success"
+  );
+}
+
+
+/* PDF에서 텍스트 항목을 추출해 행 단위로 묶고, 컬럼 위치를 헤더 키워드로 검출해서 분석 행을 뽑아낸다. */
+async function parsePdfAnalysisSheet(blob) {
+  await loadPdfJs();
+  const buf = await blob.arrayBuffer();
+  const doc = await window.pdfjsLib.getDocument({ data: buf }).promise;
+
+  const allLines = [];
+  for (let p = 1; p <= doc.numPages; p++) {
+    const page = await doc.getPage(p);
+    const content = await page.getTextContent();
+    const lines = groupItemsIntoLines(content.items);
+    allLines.push(...lines);
+  }
+  return parseLinesAsAnalysis(allLines);
+}
+
+function groupItemsIntoLines(items) {
+  const tagged = items
+    .map((it) => ({
+      str: (it.str || "").trim(),
+      x: it.transform[4],
+      y: it.transform[5],
+      h: it.height || 12
+    }))
+    .filter((it) => it.str);
+
+  // y 내림차순 (PDF 좌표는 아래에서 위로 증가 — 위에서부터 읽기)
+  tagged.sort((a, b) => b.y - a.y);
+
+  const lines = [];
+  for (const it of tagged) {
+    let placed = false;
+    for (const line of lines) {
+      const tol = Math.max(line.h, it.h) * 0.5;
+      if (Math.abs(it.y - line.y) < tol) {
+        line.items.push(it);
+        if (it.h > line.h) line.h = it.h;
+        placed = true;
+        break;
+      }
+    }
+    if (!placed) lines.push({ y: it.y, h: it.h, items: [it] });
+  }
+  for (const ln of lines) {
+    ln.items.sort((a, b) => a.x - b.x);
+  }
+  return lines;
+}
+
+function parseLinesAsAnalysis(lines) {
+  // 헤더 행 검출: 분석일자 + 분석료 키워드가 모두 보이면 그 행을 헤더로 인정
+  let headerIdx = -1;
+  let columnXs = {};
+  for (let i = 0; i < lines.length; i++) {
+    const map = {};
+    for (const item of lines[i].items) {
+      const text = item.str.replace(/\s+/g, "").toLowerCase();
+      if (!text) continue;
+      for (const [key, kws] of Object.entries(HEADER_KEYWORDS)) {
+        if (map[key] != null) continue;
+        if (kws.some((kw) => text.includes(kw.toLowerCase()))) {
+          map[key] = item.x;
+          break;
+        }
+      }
+    }
+    if (map.date != null && (map.fee != null || map.unitPrice != null)) {
+      headerIdx = i;
+      columnXs = map;
+      break;
+    }
+  }
+  if (headerIdx < 0) return [];
+
+  const out = [];
+  for (let i = headerIdx + 1; i < lines.length; i++) {
+    const cells = {};
+    for (const item of lines[i].items) {
+      // 가장 가까운 컬럼에 배정 (PDF는 셀 경계가 없으므로 x 거리 최소)
+      let bestKey = null;
+      let bestDist = Infinity;
+      for (const [key, x] of Object.entries(columnXs)) {
+        const d = Math.abs(item.x - x);
+        if (d < bestDist) {
+          bestDist = d;
+          bestKey = key;
+        }
+      }
+      if (bestKey) {
+        if (!cells[bestKey]) cells[bestKey] = [];
+        cells[bestKey].push(item.str);
+      }
+    }
+
+    const fieldText = (cells.field || []).join("").replace(/\s+/g, "");
+    if (/^(합계|소계|총계|total)/i.test(fieldText)) break;
+
+    const date = _parseExcelDate((cells.date || []).join(" "));
+    if (!date) continue;
+
+    const fee = _parseNum((cells.fee || []).join(""));
+    const vat = _parseNum((cells.vat || []).join(""));
+    const qty = _parseNum((cells.qty || []).join(""));
+    const duration = _parseNum((cells.duration || []).join(""));
+    const fieldName = (cells.field || []).join(" ").trim();
+    const eqName = (cells.eq || []).join(" ").trim();
+    const sample = (cells.sample || []).join(" ").trim();
+    const memoCell = (cells.memo || []).join(" ").trim();
+    const unitPriceCol = _parseNum((cells.unitPrice || []).join(""));
+
+    const type = [fieldName, eqName].filter(Boolean).join(" / ");
+    let amount = fee + vat;
+    if (amount <= 0 && unitPriceCol > 0 && qty > 0)
+      amount = unitPriceCol * qty;
+    if (amount <= 0 && !type) continue;
+
+    let unitPrice = unitPriceCol;
+    if (unitPrice <= 0 && qty > 0 && fee > 0)
+      unitPrice = Math.round(fee / qty);
+
+    const memoParts = [];
+    if (vat > 0) memoParts.push(`VAT ${vat.toLocaleString("ko-KR")}원 포함`);
+    if (duration > 0) memoParts.push(`분석시간 ${duration}h`);
+    if (memoCell) memoParts.push(memoCell);
+
+    out.push({
+      date,
+      type,
+      sample,
+      qty,
+      unitPrice,
+      amount,
+      memo: memoParts.join(" · ")
+    });
+  }
+  return out;
+}
+
+async function replaceAnalysisSheetFile(catKey, file) {
+  // 기존 analysisSheet 레코드 모두 삭제
+  const all = await dbGetAllFiles();
+  for (const f of all) {
+    if (f.categoryKey === catKey && f.scope === "analysisSheet") {
+      await dbDeleteFile(f.id);
+    }
+  }
+  await dbAddFile({
+    categoryKey: catKey,
+    scope: "analysisSheet",
+    itemIdx: -1,
+    name: file.name,
+    size: file.size,
+    type: file.type,
+    blob: file,
+    addedAt: Date.now()
+  });
+}
+
+function renderAnalysisSheetIndicator() {
+  const el = $("#analysisSheetIndicator");
+  if (!el) return;
+  if (!currentCategory) {
+    el.innerHTML = "";
+    return;
+  }
+  const cur = state.attachments[currentCategory] || {};
+  const sheetMeta = cur.analysisSheet;
+  const excelMeta = cur.analysisExcel;
+  if (!sheetMeta && !excelMeta) {
+    el.innerHTML = `<div class="ana-sheet-empty">📂 시험분석 결과서 미보관 — 엑셀과 PDF를 함께 불러오면 행 추출(엑셀) + 원본 병합(PDF)이 동시에 처리됩니다.</div>`;
+    return;
+  }
+  const rows = [];
+  if (excelMeta) {
+    rows.push(`
+      <div class="ana-sheet-have">
+        <span>📊 <strong>엑셀 (행 추출):</strong> ${escapeHTML(excelMeta.name)} <span class="muted">(${humanSize(excelMeta.size)})</span></span>
+        <button class="btn ghost small" data-ana-remove="excel">× 제거</button>
+        <button class="btn ghost small" data-ana-download="${excelMeta.id}">↓ 원본</button>
+      </div>`);
+  }
+  if (sheetMeta) {
+    const ext = (sheetMeta.name || "").split(".").pop().toLowerCase();
+    const kind = ext === "pdf" ? "PDF" : "엑셀(병합용)";
+    rows.push(`
+      <div class="ana-sheet-have">
+        <span>📎 <strong>${kind} (병합):</strong> ${escapeHTML(sheetMeta.name)} <span class="muted">(${humanSize(sheetMeta.size)})</span></span>
+        <button class="btn ghost small" data-ana-remove="sheet">× 제거</button>
+        <button class="btn ghost small" data-ana-download="${sheetMeta.id}">↓ 원본</button>
+      </div>`);
+  }
+  el.innerHTML = rows.join("");
+
+  el.querySelectorAll("[data-ana-remove]").forEach((btn) =>
+    btn.addEventListener("click", async () => {
+      const which = btn.dataset.anaRemove;
+      const meta = which === "excel" ? excelMeta : sheetMeta;
+      if (!meta) return;
+      if (!confirm(`이 파일을 제거할까요?\n${meta.name}`)) return;
+      await dbDeleteFile(meta.id);
+      await rebuildAttachmentsIndex();
+      renderAnalysisSheetIndicator();
+      renderAnalysisTable();
+      showToast("제거되었습니다.");
+    })
+  );
+  el.querySelectorAll("[data-ana-download]").forEach((btn) =>
+    btn.addEventListener("click", () =>
+      downloadOneFile(Number(btn.dataset.anaDownload))
+    )
+  );
+}
+
+function renderAnalysisTable() {
+  if (!currentCategory) return;
+  const list = getAnalyses(currentCategory);
+  const wrap = $("#analysisCards");
+  if (!wrap) return;
+
+  if (list.length === 0) {
+    wrap.innerHTML = `<div class="empty">아직 입력된 분석 내역이 없습니다. 위에서 직접 입력하거나 ‘📂 엑셀 불러오기’를 사용하세요.</div>`;
+  } else {
+    const sorted = [...list].sort((a, b) =>
+      a.date < b.date ? -1 : a.date > b.date ? 1 : 0
+    );
+
+    wrap.innerHTML = sorted
+      .map((a) => {
+        const requestFiles = attachmentsForAnalysis(currentCategory, a.id, "request");
+        const resultFiles = attachmentsForAnalysis(currentCategory, a.id, "result");
+        const meta = [
+          a.qty ? `시료 ${a.qty}` : "",
+          a.unitPrice ? `단가 ${Number(a.unitPrice).toLocaleString("ko-KR")}원` : "",
+          a.memo
+        ]
+          .filter(Boolean)
+          .join(" · ");
+        return `
+          <div class="analysis-card" data-ana-id="${a.id}">
+            <div class="ana-card-head">
+              <span class="ana-date">${escapeHTML(a.date || "")}</span>
+              <span class="ana-type">${escapeHTML(a.type || "(항목 미지정)")}${a.sample ? " · " + escapeHTML(a.sample) : ""}</span>
+              <span class="ana-amount">${Number(a.amount || 0).toLocaleString("ko-KR")}원</span>
+              <button class="btn danger small" data-del-ana="${a.id}" title="이 분석 행과 첨부 파일을 모두 삭제">삭제</button>
+            </div>
+            ${meta ? `<div class="ana-card-meta">${escapeHTML(meta)}</div>` : ""}
+            <div class="ana-card-slots">
+              ${renderAnaSlot(a.id, "request", "분석의뢰서", requestFiles)}
+              ${renderAnaSlot(a.id, "result", "결과데이터", resultFiles)}
+            </div>
+          </div>`;
+      })
+      .join("");
+
+    // 슬롯 파일 업로드
+    $$("#analysisCards input[type=file][data-ana-upload]").forEach((inp) => {
+      inp.addEventListener("change", (e) => {
+        const [anaId, slot] = inp.dataset.anaUpload.split(":");
+        handleAnaSlotUpload(e, anaId, slot);
+      });
+    });
+    // 슬롯 파일 다운로드
+    $$("#analysisCards [data-download-ana-file]").forEach((btn) =>
+      btn.addEventListener("click", () =>
+        downloadOneFile(Number(btn.dataset.downloadAnaFile))
+      )
+    );
+    // 슬롯 파일 삭제
+    $$("#analysisCards [data-del-ana-file]").forEach((btn) =>
+      btn.addEventListener("click", async () => {
+        if (!confirm("이 파일을 삭제할까요?")) return;
+        await dbDeleteFile(Number(btn.dataset.delAnaFile));
+        await rebuildAttachmentsIndex();
+        renderAnalysisTable();
+        showToast("파일을 삭제했습니다.");
+      })
+    );
+    // 분석 행 + 첨부 일괄 삭제
+    $$("#analysisCards [data-del-ana]").forEach((btn) =>
+      btn.addEventListener("click", () => deleteAnalysisEntry(btn.dataset.delAna))
+    );
+  }
+
+  const total = list.reduce((s, a) => s + (Number(a.amount) || 0), 0);
+  $("#analysisCount").textContent = list.length;
+  $("#analysisSum").textContent = total.toLocaleString("ko-KR") + "원";
+  const cur = state.attachments[currentCategory] || {};
+  const hasPdf =
+    cur.analysisSheet &&
+    ((cur.analysisSheet.name || "").toLowerCase().endsWith(".pdf") ||
+      (cur.analysisSheet.type || "").includes("pdf"));
+  const hasExcel =
+    !!cur.analysisExcel ||
+    (cur.analysisSheet &&
+      /(\.xlsx|\.xls|\.csv)$/i.test(cur.analysisSheet.name || ""));
+  let hint = "";
+  if (hasPdf && hasExcel) hint = "(엑셀+PDF 보관됨 — PDF 그대로 병합)";
+  else if (hasPdf) hint = "(PDF 보관됨 — 그대로 병합)";
+  else if (hasExcel) hint = "(엑셀만 보관됨 — 자동 변환 시도)";
+  else hint = "(시험분석 결과서 미보관)";
+  $("#analysisPagesHint").textContent = hint;
+}
+
+function renderAnaSlot(anaId, slot, label, files) {
+  const empty = files.length === 0;
+  const fileList = empty
+    ? `<div style="font-size:11.5px;color:var(--text-muted);">아직 첨부 없음</div>`
+    : `<ul class="file-list">${files
+        .map(
+          (f) => `
+        <li>
+          <span class="file-name">📎 ${escapeHTML(f.name)}</span>
+          <span class="file-size">${humanSize(f.size)}</span>
+          <button data-download-ana-file="${f.id}" title="다운로드">↓</button>
+          <button class="del" data-del-ana-file="${f.id}" title="삭제">×</button>
+        </li>`
+        )
+        .join("")}</ul>`;
+  return `
+    <div class="ana-slot ${empty ? "empty" : ""}">
+      <div class="ana-slot-head">
+        <span>${escapeHTML(label)}${files.length > 0 ? ` · ${files.length}` : ""}</span>
+        <label class="file-btn">
+          + 파일
+          <input type="file" multiple data-ana-upload="${anaId}:${slot}" />
+        </label>
+      </div>
+      ${fileList}
+    </div>`;
+}
+
+async function handleAnaSlotUpload(e, anaId, slot) {
+  const files = Array.from(e.target.files || []);
+  if (!files.length) return;
+  try {
+    for (const f of files) {
+      await dbAddFile({
+        categoryKey: currentCategory,
+        scope: "analysis",
+        analysisId: anaId,
+        slot,
+        itemIdx: -1, // not applicable
+        name: f.name,
+        size: f.size,
+        type: f.type,
+        blob: f,
+        addedAt: Date.now()
+      });
+    }
+    await rebuildAttachmentsIndex();
+    renderAnalysisTable();
+    showToast(`${files.length}개 파일을 첨부했습니다.`, "success");
+  } catch (err) {
+    console.error(err);
+    showToast("파일 저장 중 오류가 발생했습니다.", "danger");
+  } finally {
+    e.target.value = "";
+  }
+}
+
+async function deleteAnalysisEntry(anaId) {
+  if (!currentCategory) return;
+  const entry = getAnalyses(currentCategory).find((x) => x.id === anaId);
+  if (!entry) return;
+  const files =
+    state.attachments[currentCategory]?.byAnalysis?.[anaId] || {
+      request: [],
+      result: []
+    };
+  const fileCount = (files.request || []).length + (files.result || []).length;
+  const msg =
+    fileCount > 0
+      ? `이 분석 행과 첨부 파일 ${fileCount}개를 모두 삭제할까요?`
+      : "이 분석 행을 삭제할까요?";
+  if (!confirm(msg)) return;
+
+  for (const meta of files.request || []) await dbDeleteFile(meta.id);
+  for (const meta of files.result || []) await dbDeleteFile(meta.id);
+  setAnalyses(
+    currentCategory,
+    getAnalyses(currentCategory).filter((x) => x.id !== anaId)
+  );
+  await rebuildAttachmentsIndex();
+  renderAnalysisTable();
+  showToast("삭제되었습니다.");
+}
+
+async function renderSheetCanvas(blob) {
+  await loadXlsx();
+  await loadHtml2Canvas();
+  const buf = await blob.arrayBuffer();
+  const wb = window.XLSX.read(buf, {
+    type: "array",
+    cellDates: true,
+    cellStyles: true
+  });
+  const ws = wb.Sheets[wb.SheetNames[0]];
+
+  // 시트 메타: 열너비 / 행높이 / 병합 정보를 추출해 HTML에 그대로 반영
+  const range = window.XLSX.utils.decode_range(ws["!ref"] || "A1");
+  const numCols = range.e.c - range.s.c + 1;
+  const colsInfo = ws["!cols"] || [];
+  const rowsInfo = ws["!rows"] || [];
+
+  // 엑셀이 그려주는 표준 HTML — 셀값/병합(rowspan·colspan)이 자동 반영됨
+  const html = window.XLSX.utils.sheet_to_html(ws, { editable: false });
+
+  const container = document.createElement("div");
+  container.style.cssText = `
+    position: fixed;
+    left: -10000px; top: 0;
+    background: #fff;
+    padding: 24px;
+    font-family: 'Calibri', '맑은 고딕', 'Malgun Gothic', 'Apple SD Gothic Neo', 'Pretendard', sans-serif;
+    color: #000;
+  `;
+  container.innerHTML = html;
+
+  const table = container.querySelector("table");
+  if (table) {
+    table.style.cssText = `
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 10.5pt;
+    `;
+
+    // 1) 열너비: !cols.wpx 우선, 없으면 wch * 7px
+    const colWidths = [];
+    let totalW = 0;
+    for (let i = 0; i < numCols; i++) {
+      const info = colsInfo[i];
+      let w = 64;
+      if (info?.wpx) w = info.wpx;
+      else if (info?.wch) w = Math.round(info.wch * 7 + 5);
+      else if (info?.width) w = Math.round(info.width * 7 + 5);
+      colWidths.push(w);
+      totalW += w;
+    }
+    let colgroup = table.querySelector("colgroup");
+    if (!colgroup) {
+      colgroup = document.createElement("colgroup");
+      table.insertBefore(colgroup, table.firstChild);
+      for (let i = 0; i < numCols; i++) {
+        const col = document.createElement("col");
+        col.style.width = colWidths[i] + "px";
+        colgroup.appendChild(col);
+      }
+    } else {
+      const existing = colgroup.querySelectorAll("col");
+      for (let i = 0; i < Math.min(existing.length, numCols); i++) {
+        existing[i].style.width = colWidths[i] + "px";
+      }
+    }
+    table.style.width = totalW + "px";
+
+    // 2) 셀 공통 스타일
+    table.querySelectorAll("td, th").forEach((cell) => {
+      cell.style.border = "1px solid #888";
+      cell.style.padding = "3px 5px";
+      cell.style.verticalAlign = "middle";
+      cell.style.overflow = "hidden";
+      cell.style.wordBreak = "keep-all";
+      cell.style.fontSize = "10.5pt";
+      cell.style.lineHeight = "1.25";
+      // 숫자 셀은 우측 정렬
+      const t = cell.getAttribute("data-t");
+      if (t === "n") cell.style.textAlign = "right";
+      // 병합된 셀(rowspan>1 또는 colspan>1)은 중앙 정렬 — 보통 라벨이거나 헤더
+      if (
+        (cell.getAttribute("rowspan") &&
+          parseInt(cell.getAttribute("rowspan")) > 1) ||
+        (cell.getAttribute("colspan") &&
+          parseInt(cell.getAttribute("colspan")) > 1)
+      ) {
+        cell.style.textAlign = "center";
+        cell.style.fontWeight = "bold";
+      }
+    });
+
+    // 3) 행높이 — !rows.hpx 또는 hpt
+    const trs = table.querySelectorAll("tr");
+    trs.forEach((tr, idx) => {
+      const r = rowsInfo[idx];
+      if (r) {
+        let h = 0;
+        if (r.hpx) h = r.hpx;
+        else if (r.hpt) h = Math.round((r.hpt * 96) / 72);
+        if (h > 0) tr.style.height = h + "px";
+      }
+    });
+
+    // 4) 첫 행(제목) 강조
+    const firstTr = trs[0];
+    if (firstTr) {
+      firstTr.querySelectorAll("td, th").forEach((cell) => {
+        cell.style.fontWeight = "bold";
+        cell.style.fontSize = "14pt";
+        cell.style.textAlign = "center";
+      });
+    }
+  }
+
+  document.body.appendChild(container);
+  await new Promise((r) => setTimeout(r, 100));
+  try {
+    const canvas = await window.html2canvas(container, {
+      scale: 2,
+      backgroundColor: "#ffffff",
+      logging: false,
+      useCORS: true
+    });
+    return canvas;
+  } finally {
+    document.body.removeChild(container);
+  }
+}
+
+async function addAnalysisSheetPages(pdf) {
+  if (!currentCategory) return;
+  const cat = REQUIREMENTS[currentCategory];
+  if (!cat?.hasAnalysisDetails) return;
+  const cur = state.attachments[currentCategory] || {};
+  // 우선순위: PDF(analysisSheet) > 엑셀(analysisExcel via html2canvas)
+  const meta = cur.analysisSheet || cur.analysisExcel;
+  if (!meta) return;
+  const rec = await dbGetFile(meta.id);
+  if (!rec?.blob) return;
+
+  const ext = (rec.name || "").split(".").pop().toLowerCase();
+  const isPdf = rec.type === "application/pdf" || ext === "pdf";
+  const isExcel =
+    ext === "xlsx" ||
+    ext === "xls" ||
+    rec.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+    rec.type === "application/vnd.ms-excel";
+
+  // (a) PDF: 그대로 페이지 복사
+  if (isPdf) {
+    try {
+      const buf = await rec.blob.arrayBuffer();
+      const src = await window.PDFLib.PDFDocument.load(buf, {
+        ignoreEncryption: true
+      });
+      const copied = await pdf.copyPages(src, src.getPageIndices());
+      copied.forEach((p) => pdf.addPage(p));
+    } catch (err) {
+      console.warn("결과서 PDF 병합 실패:", err);
+      await addNotePage(pdf, [
+        "시험분석 결과서 (거래명세서 겸)",
+        `파일: ${rec.name}`,
+        "사유: PDF 병합 실패 (암호화/손상 가능). 별도 출력 필요."
+      ]);
+    }
+    return;
+  }
+
+  // (b) 엑셀: 자동 변환 (html2canvas → A4 페이지로 임베드, 길면 분할)
+  if (isExcel) {
+    let canvas;
+    try {
+      canvas = await renderSheetCanvas(rec.blob);
+    } catch (err) {
+      console.warn("엑셀 자동 변환 실패:", err);
+      await addNotePage(pdf, [
+        "시험분석 결과서 (거래명세서 겸)",
+        `파일: ${rec.name}`,
+        "사유: 엑셀 자동 변환 실패. 엑셀을 PDF로 직접 변환해 다시 첨부해 주세요."
+      ]);
+      return;
+    }
+
+    const M = 24;
+    const innerW = A4_W - 2 * M;
+    const innerH = A4_H - 2 * M;
+    const ratio = canvas.width / canvas.height;
+    const targetW = innerW;
+    const targetH = targetW / ratio;
+
+    if (targetH <= innerH) {
+      const bytes = await canvasToPngBytes(canvas);
+      const img = await pdf.embedPng(bytes);
+      const page = pdf.addPage([A4_W, A4_H]);
+      page.drawImage(img, {
+        x: M,
+        y: M + (innerH - targetH) / 2,
+        width: targetW,
+        height: targetH
+      });
+    } else {
+      // 폭 기준 fit, 세로로 슬라이스해 여러 페이지에 나눠 출력
+      const pxPerPage = (canvas.width / targetW) * innerH;
+      const totalPages = Math.ceil(canvas.height / pxPerPage);
+      for (let p = 0; p < totalPages; p++) {
+        const sliceY = Math.round(p * pxPerPage);
+        const sliceH = Math.round(
+          Math.min(pxPerPage, canvas.height - sliceY)
+        );
+        const tmp = document.createElement("canvas");
+        tmp.width = canvas.width;
+        tmp.height = sliceH;
+        const tctx = tmp.getContext("2d");
+        tctx.fillStyle = "#fff";
+        tctx.fillRect(0, 0, tmp.width, tmp.height);
+        tctx.drawImage(
+          canvas,
+          0,
+          sliceY,
+          canvas.width,
+          sliceH,
+          0,
+          0,
+          canvas.width,
+          sliceH
+        );
+        const bytes = await canvasToPngBytes(tmp);
+        const img = await pdf.embedPng(bytes);
+        const page = pdf.addPage([A4_W, A4_H]);
+        const sliceTargetH = (sliceH / canvas.width) * targetW;
+        page.drawImage(img, {
+          x: M,
+          y: A4_H - M - sliceTargetH,
+          width: targetW,
+          height: sliceTargetH
+        });
+      }
+    }
+    return;
+  }
+
+  // (c) 알 수 없는 형식
+  await addNotePage(pdf, [
+    "시험분석 결과서 (거래명세서 겸)",
+    `파일: ${rec.name}`,
+    "사유: 지원하지 않는 형식 (xlsx 또는 pdf만 지원)."
+  ]);
+}
+
+async function addNotePage(pdf, lines) {
+  const SCALE = 2;
+  const W = A4_W * SCALE;
+  const H = A4_H * SCALE;
+  const c = document.createElement("canvas");
+  c.width = W;
+  c.height = H;
+  const ctx = c.getContext("2d");
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "#fff8dc";
+  ctx.fillRect(40 * SCALE, 100 * SCALE, W - 80 * SCALE, 240 * SCALE);
+  ctx.strokeStyle = "#f0c674";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(40 * SCALE, 100 * SCALE, W - 80 * SCALE, 240 * SCALE);
+  ctx.fillStyle = "#7a5800";
+  ctx.font = `bold ${18 * SCALE}px ${KFONT}`;
+  ctx.fillText("⚠ 별도 출력 필요 항목", 60 * SCALE, 140 * SCALE);
+  ctx.font = `${12 * SCALE}px ${KFONT}`;
+  let y = 175 * SCALE;
+  for (const ln of lines) {
+    ctx.fillText(ln, 60 * SCALE, y);
+    y += 24 * SCALE;
+  }
+  const bytes = await canvasToPngBytes(c);
+  const img = await pdf.embedPng(bytes);
+  const page = pdf.addPage([A4_W, A4_H]);
+  page.drawImage(img, { x: 0, y: 0, width: A4_W, height: A4_H });
+}
+
+function countCatFiles(catFiles) {
+  let n = 0;
+  for (const [k, v] of Object.entries(catFiles || {})) {
+    if (k === "byAnalysis") {
+      for (const slots of Object.values(v)) {
+        n += (slots.request || []).length + (slots.result || []).length;
+      }
+    } else if (k === "analysisSheet" || k === "analysisExcel") {
+      if (v) n += 1;
+    } else if (Array.isArray(v)) {
+      n += v.length;
+    }
+  }
+  return n;
+}
+
+async function processFilesGroup(pdf, files, headerOpts) {
+  const { PDFDocument } = window.PDFLib;
+  const blobFiles = [];
+  for (const meta of files) {
+    const rec = await dbGetFile(meta.id);
+    if (rec?.blob) blobFiles.push(rec);
+  }
+  const images = [];
+  const pdfRecs = [];
+  const others = [];
+  for (const rec of blobFiles) {
+    const k = classifyFile(rec);
+    if (k === "image") images.push(rec);
+    else if (k === "pdf") pdfRecs.push(rec);
+    else others.push(rec);
+  }
+
+  if (images.length > 0) {
+    const totalGridPages = Math.ceil(images.length / 6);
+    for (let p = 0; p < images.length; p += 6) {
+      const chunk = images.slice(p, p + 6);
+      await addImageGridPage(pdf, {
+        ...headerOpts,
+        pageIdx: Math.floor(p / 6) + 1,
+        totalGridPages,
+        images: chunk
+      });
+    }
+  }
+  for (const rec of pdfRecs) {
+    try {
+      const buf = await rec.blob.arrayBuffer();
+      const ext = await PDFDocument.load(buf, { ignoreEncryption: true });
+      const copied = await pdf.copyPages(ext, ext.getPageIndices());
+      copied.forEach((p) => pdf.addPage(p));
+    } catch (err) {
+      console.warn("PDF 병합 실패:", rec.name, err);
+      await addNotePage(pdf, [
+        `항목: ${headerOpts.itemName}`,
+        `파일: ${rec.name}`,
+        "사유: PDF 파일을 병합할 수 없습니다 (암호화/손상). 별도 출력 필요."
+      ]);
+    }
+  }
+  for (const rec of others) {
+    await addNotePage(pdf, [
+      `항목: ${headerOpts.itemName}`,
+      `파일: ${rec.name}`,
+      "사유: PDF/이미지가 아닌 파일입니다. 별도 변환·출력 필요."
+    ]);
+  }
+}
+
+// 새 레이아웃: 한 페이지에 분석 3개, 각 분석마다 좌(분석의뢰서) · 우(결과데이터) 분할
+const ANALYSES_PER_PAGE = 3;
+
+function extractDuration(memo) {
+  const m = (memo || "").match(/분석시간\s*(\d+)\s*h/i);
+  return m ? `${m[1]}시간` : "";
+}
+
+async function renderAnaTitleCanvas(ana, widthPt, heightPt) {
+  const SCALE = 3;
+  const W = Math.round(widthPt * SCALE);
+  const H = Math.round(heightPt * SCALE);
+  const c = document.createElement("canvas");
+  c.width = W;
+  c.height = H;
+  const ctx = c.getContext("2d");
+
+  ctx.fillStyle = "#003876";
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.fillStyle = "#fff";
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "left";
+  ctx.font = `bold ${10 * SCALE}px ${KFONT}`;
+
+  const duration = extractDuration(ana.memo);
+  const segments = [];
+  if (ana.type) segments.push(ana.type);
+  if (ana.date) segments.push(ana.date);
+  if (duration) segments.push(duration);
+  if (ana.amount)
+    segments.push(Number(ana.amount).toLocaleString("ko-KR") + "원");
+
+  let text = segments.join("  ·  ");
+  const maxW = W - 28 * SCALE;
+  if (ctx.measureText(text).width > maxW) {
+    while (text.length > 1 && ctx.measureText(text + "…").width > maxW) {
+      text = text.slice(0, -1);
+    }
+    text += "…";
+  }
+  ctx.fillText(text, 14 * SCALE, H / 2);
+  return c;
+}
+
+async function renderSlotLabelCanvas(label, count, widthPt, heightPt) {
+  const SCALE = 3;
+  const W = Math.round(widthPt * SCALE);
+  const H = Math.round(heightPt * SCALE);
+  const c = document.createElement("canvas");
+  c.width = W;
+  c.height = H;
+  const ctx = c.getContext("2d");
+
+  const empty = count === 0;
+  ctx.fillStyle = empty ? "#fdf0ef" : "#eef3fb";
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = empty ? "#d93025" : "#003876";
+  ctx.font = `bold ${8 * SCALE}px ${KFONT}`;
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "center";
+  let text = label;
+  if (count > 1) text += ` (1/${count})`;
+  if (count === 0) text += " (첨부 없음)";
+  ctx.fillText(text, W / 2, H / 2);
+  return c;
+}
+
+async function drawSlotCell(pdf, page, files, label, x, y, w, h) {
+  const labelH = 13;
+  // Cell border
+  page.drawRectangle({
+    x,
+    y,
+    width: w,
+    height: h,
+    borderColor: window.PDFLib.rgb(0.85, 0.87, 0.9),
+    borderWidth: 0.5
+  });
+  // Label band at bottom
+  const labelCanvas = await renderSlotLabelCanvas(label, files.length, w, labelH);
+  const labelBytes = await canvasToPngBytes(labelCanvas);
+  const labelImg = await pdf.embedPng(labelBytes);
+  page.drawImage(labelImg, { x, y, width: w, height: labelH });
+
+  if (files.length === 0) return;
+
+  const fileAreaY = y + labelH + 1;
+  const fileAreaH = h - labelH - 1;
+  const meta = files[0]; // 첫 파일만 표시 (여러 개면 라벨에 1/N)
+  const rec = await dbGetFile(meta.id);
+  if (!rec?.blob) return;
+
+  let canvas;
+  try {
+    canvas = await fileBlobToCanvas(rec.blob, rec.name);
+  } catch (err) {
+    console.warn("슬롯 파일 렌더 실패:", meta.name, err);
+    return;
+  }
+  if (!canvas) return;
+
+  const bytes = await canvasToPngBytes(canvas);
+  const img = await pdf.embedPng(bytes);
+  const PAD = 3;
+  const innerW = w - PAD * 2;
+  const innerH = fileAreaH - PAD * 2;
+  const imgAR = canvas.width / canvas.height;
+  const cellAR = innerW / innerH;
+  let drawW, drawH;
+  if (imgAR > cellAR) {
+    drawW = innerW;
+    drawH = drawW / imgAR;
+  } else {
+    drawH = innerH;
+    drawW = drawH * imgAR;
+  }
+  page.drawImage(img, {
+    x: x + (w - drawW) / 2,
+    y: fileAreaY + (fileAreaH - drawH) / 2,
+    width: drawW,
+    height: drawH
+  });
+}
+
+async function addPerAnalysisLayoutPage(pdf, analyses, byAna) {
+  const M = 24;
+  const innerW = A4_W - 2 * M;
+  const innerH = A4_H - 2 * M;
+  const sectionTotalH = innerH / ANALYSES_PER_PAGE;
+  const sectionGap = 4;
+  const titleH = 22;
+  const colGap = 5;
+  const colW = (innerW - colGap) / 2;
+
+  const page = pdf.addPage([A4_W, A4_H]);
+
+  for (let i = 0; i < analyses.length; i++) {
+    const ana = analyses[i];
+    const slots = byAna[ana.id] || { request: [], result: [] };
+
+    // i=0이 페이지 상단. pdf-lib y는 아래에서 위로 증가.
+    const sectionBottom = M + (ANALYSES_PER_PAGE - 1 - i) * sectionTotalH;
+    const sectionTopY = sectionBottom + sectionTotalH - sectionGap;
+
+    // 제목 띠
+    const titleY = sectionTopY - titleH;
+    const titleCanvas = await renderAnaTitleCanvas(ana, innerW, titleH);
+    const titleBytes = await canvasToPngBytes(titleCanvas);
+    const titleImg = await pdf.embedPng(titleBytes);
+    page.drawImage(titleImg, {
+      x: M,
+      y: titleY,
+      width: innerW,
+      height: titleH
+    });
+
+    // 콘텐츠 영역 (제목 아래)
+    const contentTop = titleY - 4;
+    const contentBottom = sectionBottom;
+    const contentH = contentTop - contentBottom;
+    const leftX = M;
+    const rightX = M + colW + colGap;
+
+    await drawSlotCell(
+      pdf,
+      page,
+      slots.request || [],
+      "분석의뢰서",
+      leftX,
+      contentBottom,
+      colW,
+      contentH
+    );
+    await drawSlotCell(
+      pdf,
+      page,
+      slots.result || [],
+      "결과데이터",
+      rightX,
+      contentBottom,
+      colW,
+      contentH
+    );
+  }
+}
+
+async function addPerAnalysisAttachments(pdf) {
+  if (!currentCategory) return;
+  const cat = REQUIREMENTS[currentCategory];
+  if (!Array.isArray(cat?.perAnalysisItems)) return;
+
+  const list = (state.analyses[currentCategory] || []).slice().sort((a, b) =>
+    a.date < b.date ? -1 : a.date > b.date ? 1 : 0
+  );
+  if (list.length === 0) return;
+
+  const byAna = state.attachments[currentCategory]?.byAnalysis || {};
+  const entriesWithFiles = list.filter((ana) => {
+    const slots = byAna[ana.id] || { request: [], result: [] };
+    return (slots.request || []).length > 0 || (slots.result || []).length > 0;
+  });
+  if (entriesWithFiles.length === 0) return;
+
+  for (let p = 0; p < entriesWithFiles.length; p += ANALYSES_PER_PAGE) {
+    const chunk = entriesWithFiles.slice(p, p + ANALYSES_PER_PAGE);
+    await addPerAnalysisLayoutPage(pdf, chunk, byAna);
+  }
+}
+
+async function buildSubmissionPdf() {
+  if (!window.PDFLib) throw new Error("PDF 라이브러리 로드 실패 (인터넷 확인)");
+  if (!currentCategory) throw new Error("세목을 먼저 선택하세요.");
+  const cat = REQUIREMENTS[currentCategory];
+  const catFiles = state.attachments[currentCategory] || {};
+  const fileCount = countCatFiles(catFiles);
+  const entryCount = (state.analyses[currentCategory] || []).length;
+  if (fileCount === 0 && entryCount === 0)
+    throw new Error("첨부된 파일도 분석 내역도 없습니다.");
+
+  const { PDFDocument } = window.PDFLib;
+  const pdf = await PDFDocument.create();
+  pdf.setTitle(`연구비 증빙 - ${cat.label}`);
+  pdf.setCreator("연구비 증빙 도우미");
+
+  const date = $("#mailDate").value || todayISO();
+  const amount = Number($("#mailAmount").value) || 0;
+  const reason = $("#mailReason").value.trim();
+  const userName = $("#mailUserName").value.trim() || state.user.name;
+  const professor = FIXED_PROFESSOR_NAME;
+  const invoiceDate = $("#mailInvoiceDate").value || "";
+
+  // 1) 표지
+  const coverCanvas = await renderCoverCanvas({
+    cat,
+    date,
+    invoiceDate,
+    amount,
+    reason,
+    userName,
+    professor,
+    catFiles
+  });
+  const coverBytes = await canvasToPngBytes(coverCanvas);
+  const coverImg = await pdf.embedPng(coverBytes);
+  pdf
+    .addPage([A4_W, A4_H])
+    .drawImage(coverImg, { x: 0, y: 0, width: A4_W, height: A4_H });
+
+  // 2) 월 단위 첨부 (영수증/세금계산서, 거래명세서 등 cat.items) — 앞쪽에 위치
+  for (let i = 0; i < cat.items.length; i++) {
+    const files = catFiles[i] || [];
+    if (files.length === 0) continue;
+    await processFilesGroup(pdf, files, {
+      itemName: cat.items[i],
+      itemIdx: i + 1,
+      totalCatItems: cat.items.length
+    });
+  }
+
+  // 3) 시험분석 결과서 (거래명세서 겸) — 사용자가 첨부한 PDF를 그대로 병합
+  await addAnalysisSheetPages(pdf);
+
+  // 4) 분석별 첨부 (페이지당 3개 분석, 각 분석마다 분석의뢰서 ↔ 결과데이터 좌우 분할)
+  await addPerAnalysisAttachments(pdf);
+
+  const bytes = await pdf.save();
+  return new Blob([bytes], { type: "application/pdf" });
+}
+
+async function downloadSubmissionPdf() {
+  if (!currentCategory) return showToast("먼저 세목을 선택하세요.", "danger");
+  showToast("PDF 생성 중…");
+  try {
+    const blob = await buildSubmissionPdf();
+    const cat = REQUIREMENTS[currentCategory];
+    const stamp = todayISO().replace(/-/g, "");
+    const filename = `${cat.label}_증빙_${stamp}.pdf`.replace(/\s+/g, "_");
+    triggerDownload(blob, filename);
+    const added = maybeAddToUsageFromMail();
+    showToast(
+      `📄 PDF 다운로드 완료${added ? " · 📋 사용내역 자동 추가됨" : ""}`,
+      "success"
+    );
+  } catch (err) {
+    console.error(err);
+    showToast("PDF 생성 실패: " + err.message, "danger");
+  }
+}
+
+async function previewSubmissionPdf() {
+  if (!currentCategory) return showToast("먼저 세목을 선택하세요.", "danger");
+  // 팝업 차단을 피하려고 사용자 클릭 직후 창을 먼저 엽니다.
+  const win = window.open("about:blank", "_blank");
+  if (!win) {
+    showToast("팝업이 차단되었습니다. ‘PDF 다운로드’를 이용하세요.", "danger");
+    return;
+  }
+  showToast("PDF 생성 중…");
+  try {
+    const blob = await buildSubmissionPdf();
+    const url = URL.createObjectURL(blob);
+    win.location.href = url;
+    win.addEventListener("load", () => {
+      try {
+        win.print();
+      } catch {}
+    });
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    const added = maybeAddToUsageFromMail();
+    showToast(
+      `🖨 미리보기 열림${added ? " · 📋 사용내역 자동 추가됨" : ""}`,
+      "success"
+    );
+  } catch (err) {
+    console.error(err);
+    try { win.close(); } catch {}
+    showToast("PDF 생성 실패: " + err.message, "danger");
+  }
+}
+
+/* ---------- mail modal ---------- */
+async function extractInvoiceDateFromBlob(blob, filename) {
+  const ext = (filename || "").split(".").pop().toLowerCase();
+  const isPdf = ext === "pdf" || (blob.type || "").includes("pdf");
+  if (!isPdf) return "";
+  await loadPdfJs();
+  const buf = await blob.arrayBuffer();
+  const doc = await window.pdfjsLib.getDocument({ data: buf }).promise;
+  let allText = "";
+  const numPages = Math.min(doc.numPages, 2); // 발행일은 보통 1페이지에 있음
+  for (let p = 1; p <= numPages; p++) {
+    const page = await doc.getPage(p);
+    const content = await page.getTextContent();
+    allText += " " + content.items.map((it) => it.str).join(" ");
+  }
+  // 한국 세금계산서 키워드 + 날짜 패턴
+  const keywords = [
+    "작성일자",
+    "작성년월일",
+    "작성연월일",
+    "발행일자",
+    "발행일",
+    "작성일"
+  ];
+  for (const kw of keywords) {
+    const re = new RegExp(
+      kw +
+        "[\\s:]*([0-9]{4})[\\s.\\-/년]+([0-9]{1,2})[\\s.\\-/월]+([0-9]{1,2})"
+    );
+    const m = allText.match(re);
+    if (m) {
+      return `${m[1]}-${String(parseInt(m[2])).padStart(2, "0")}-${String(parseInt(m[3])).padStart(2, "0")}`;
+    }
+  }
+  // 폴백: 첫 페이지 어디든 그럴듯한 날짜
+  const m2 = allText.match(
+    /(20\d{2})[\s.\-/년]+(\d{1,2})[\s.\-/월]+(\d{1,2})/
+  );
+  if (m2) {
+    return `${m2[1]}-${String(parseInt(m2[2])).padStart(2, "0")}-${String(parseInt(m2[3])).padStart(2, "0")}`;
+  }
+  return "";
+}
+
+async function findInvoiceDate(catFiles) {
+  for (const [k, v] of Object.entries(catFiles || {})) {
+    if (
+      k === "byAnalysis" ||
+      k === "analysisSheet" ||
+      k === "analysisExcel"
+    )
+      continue;
+    if (!Array.isArray(v)) continue;
+    for (const meta of v) {
+      const rec = await dbGetFile(meta.id);
+      if (!rec?.blob) continue;
+      try {
+        const date = await extractInvoiceDateFromBlob(rec.blob, rec.name);
+        if (date) return date;
+      } catch (e) {
+        console.warn("영수증 날짜 추출 실패:", meta.name, e);
+      }
+    }
+  }
+  return "";
+}
+
+function openMailModal() {
+  if (!currentCategory) {
+    showToast("먼저 세목을 선택하세요.", "danger");
+    return;
+  }
+  mailSessionAdded = false; // 새 모달 세션 시작
+  $("#mailUserName").value = state.user.name || "";
+  $("#mailProfessor").value = FIXED_PROFESSOR_NAME;
+  if (!$("#mailDate").value) $("#mailDate").value = todayISO();
+
+  // 세금계산서 발행일 자동 추출 (백그라운드)
+  const invDateEl = $("#mailInvoiceDate");
+  const invAutoEl = $("#mailInvoiceDateAuto");
+  if (invDateEl && !invDateEl.value && invAutoEl) {
+    invAutoEl.textContent = "· 영수증 PDF에서 추출 중…";
+    findInvoiceDate(state.attachments[currentCategory] || {})
+      .then((date) => {
+        if (!invDateEl.value) {
+          if (date) {
+            invDateEl.value = date;
+            invAutoEl.textContent = "· 영수증 PDF에서 자동 추출됨";
+          } else {
+            invAutoEl.textContent = "· 자동 추출 실패 — 직접 입력 가능";
+          }
+        }
+      })
+      .catch(() => {
+        invAutoEl.textContent = "";
+      });
+  }
+
+  // 분석비: 시험분석 결과서 총액을 정산 금액에 자동 반영
+  const cat = REQUIREMENTS[currentCategory];
+  const autoEl = $("#mailAmountAuto");
+  if (cat?.hasAnalysisDetails) {
+    const list = state.analyses[currentCategory] || [];
+    const sum = list.reduce((s, a) => s + (Number(a.amount) || 0), 0);
+    if (sum > 0) {
+      $("#mailAmount").value = sum;
+      autoEl.textContent = `· 시험분석 결과서 합계 ${sum.toLocaleString("ko-KR")}원 자동 입력`;
+    } else {
+      autoEl.textContent = "· 분석 내역 입력 후 자동 계산됩니다";
+    }
+  } else {
+    autoEl.textContent = "";
+  }
+
+  updateMailPreview();
+  showModal("mailModal");
+}
+
+function maybeAddToUsageFromMail() {
+  if (mailSessionAdded) return false;
+  if (!currentCategory) return false;
+  const date = $("#mailDate").value;
+  const amount = Number($("#mailAmount").value) || 0;
+  const memo = $("#mailReason").value.trim();
+  if (!date || amount <= 0) return false;
+
+  state.usage.push({
+    id: uid(),
+    date,
+    category: currentCategory,
+    amount,
+    memo: memo || REQUIREMENTS[currentCategory].label
+  });
+  saveJSON(LS_KEYS.usage, state.usage);
+  mailSessionAdded = true;
+  renderUsage();
+  return true;
+}
+
+function updateMailPreview() {
+  // PDF 모드: 학생 이름만 state에 저장
+  state.user.name = $("#mailUserName").value.trim();
+  saveJSON(LS_KEYS.user, state.user);
+}
+
+function initMailModal() {
+  ["mailUserName", "mailDate", "mailInvoiceDate", "mailAmount", "mailReason"].forEach((id) => {
+    $("#" + id).addEventListener("input", updateMailPreview);
+  });
+  $("#downloadPdf").addEventListener("click", downloadSubmissionPdf);
+  $("#previewPdf").addEventListener("click", previewSubmissionPdf);
+}
+
+/* ---------- usage ---------- */
+const PROFESSOR_EMAIL = ""; // 박남영T 이메일 — 알면 여기 넣어두면 mailto: 자동 채워짐
+
+let usagePeriod = { preset: "thisMonth", from: "", to: "" };
+
+function startOfMonth(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-01`;
+}
+function endOfMonth(d) {
+  const last = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+  return `${last.getFullYear()}-${String(last.getMonth() + 1).padStart(2, "0")}-${String(last.getDate()).padStart(2, "0")}`;
+}
+
+function computePeriodRange() {
+  const today = new Date();
+  if (usagePeriod.preset === "thisMonth") {
+    return { from: startOfMonth(today), to: endOfMonth(today) };
+  }
+  if (usagePeriod.preset === "lastMonth") {
+    const last = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+    return { from: startOfMonth(last), to: endOfMonth(last) };
+  }
+  if (usagePeriod.preset === "thisYear") {
+    return { from: `${today.getFullYear()}-01-01`, to: `${today.getFullYear()}-12-31` };
+  }
+  if (usagePeriod.preset === "all") {
+    return { from: "", to: "" };
+  }
+  return { from: usagePeriod.from || "", to: usagePeriod.to || "" };
+}
+
+function periodLabel() {
+  const r = computePeriodRange();
+  if (!r.from && !r.to) return "전체 기간";
+  if (r.from && r.to) {
+    if (r.from.slice(0, 7) === r.to.slice(0, 7)) {
+      const [y, m] = r.from.split("-");
+      return `${y}년 ${parseInt(m)}월 (${r.from} ~ ${r.to})`;
+    }
+    return `${r.from} ~ ${r.to}`;
+  }
+  if (r.from) return `${r.from} 이후`;
+  return `${r.to} 이전`;
+}
+
+function getFilteredUsage() {
+  const r = computePeriodRange();
+  return state.usage.filter((u) => {
+    if (r.from && u.date < r.from) return false;
+    if (r.to && u.date > r.to) return false;
+    return true;
+  });
+}
+
+function initUsage() {
+  $("#useDate").value = todayISO();
+  $("#addUsage").addEventListener("click", () => {
+    const date = $("#useDate").value;
+    const cat = $("#useCategory").value;
+    const amount = Number($("#useAmount").value) || 0;
+    const memo = $("#useMemo").value.trim();
+
+    if (!date) return showToast("날짜를 선택하세요.", "danger");
+    if (!cat) return showToast("세목을 선택하세요.", "danger");
+    if (amount <= 0) return showToast("금액을 입력하세요.", "danger");
+
+    state.usage.push({ id: uid(), date, category: cat, amount, memo });
+    saveJSON(LS_KEYS.usage, state.usage);
+
+    $("#useAmount").value = "";
+    $("#useMemo").value = "";
+    showToast("사용 내역을 추가했습니다.", "success");
+    renderUsage();
+  });
+
+  // 기간 빠른 선택
+  $$('#tab-usage .usage-period .quick button').forEach((btn) => {
+    btn.addEventListener("click", () => {
+      usagePeriod.preset = btn.dataset.period;
+      $$('#tab-usage .usage-period .quick button').forEach((b) =>
+        b.classList.toggle("active", b === btn)
+      );
+      const r = computePeriodRange();
+      $("#periodFrom").value = r.from || "";
+      $("#periodTo").value = r.to || "";
+      renderUsage();
+    });
+  });
+
+  // 기간 직접 입력
+  $("#periodFrom").addEventListener("change", (e) => {
+    usagePeriod.preset = "custom";
+    usagePeriod.from = e.target.value;
+    $$('#tab-usage .usage-period .quick button').forEach((b) =>
+      b.classList.remove("active")
+    );
+    renderUsage();
+  });
+  $("#periodTo").addEventListener("change", (e) => {
+    usagePeriod.preset = "custom";
+    usagePeriod.to = e.target.value;
+    $$('#tab-usage .usage-period .quick button').forEach((b) =>
+      b.classList.remove("active")
+    );
+    renderUsage();
+  });
+
+  // 보고서 내보내기
+  $("#copyUsageReport").addEventListener("click", copyUsageReport);
+  $("#downloadUsageCsv").addEventListener("click", downloadUsageCsv);
+  $("#mailUsageReport").addEventListener("click", mailUsageReport);
+
+  // 기간 입력 초기값
+  const r0 = computePeriodRange();
+  $("#periodFrom").value = r0.from || "";
+  $("#periodTo").value = r0.to || "";
+}
+
+function renderUsage() {
+  const tb = $("#usageTbody");
+  const list = getFilteredUsage();
+
+  // 요약 갱신
+  let mat = 0,
+    act = 0;
+  for (const u of list) {
+    const k = categoryKindOf(u.category);
+    const v = Number(u.amount) || 0;
+    if (k === "material") mat += v;
+    else if (k === "activity") act += v;
+  }
+  const total = mat + act;
+  $("#summaryCount").textContent = `${list.length}건`;
+  $("#summaryMaterial").textContent = fmt(mat);
+  $("#summaryActivity").textContent = fmt(act);
+  $("#summaryTotal").textContent = fmt(total);
+  $("#usageListHint").textContent = `· ${periodLabel()}`;
+
+  if (list.length === 0) {
+    tb.innerHTML = `<tr><td colspan="5" class="empty">${
+      state.usage.length === 0
+        ? "아직 사용 내역이 없습니다."
+        : "이 기간에는 사용 내역이 없습니다."
+    }</td></tr>`;
+    return;
+  }
+
+  const sorted = [...list].sort((a, b) => (a.date < b.date ? 1 : -1));
+  tb.innerHTML = sorted
+    .map((u) => {
+      const label = REQUIREMENTS[u.category]?.label || u.category;
+      return `
+        <tr>
+          <td>${escapeHTML(u.date)}</td>
+          <td><span class="pill">${escapeHTML(label)}</span></td>
+          <td style="text-align:right; font-weight:600;">${fmt(u.amount)}</td>
+          <td>${escapeHTML(u.memo || "")}</td>
+          <td><button class="btn danger small" data-del-usage="${u.id}">삭제</button></td>
+        </tr>`;
+    })
+    .join("");
+
+  $$("[data-del-usage]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.delUsage;
+      if (!confirm("이 사용 내역을 삭제할까요?")) return;
+      state.usage = state.usage.filter((u) => u.id !== id);
+      saveJSON(LS_KEYS.usage, state.usage);
+      renderUsage();
+      showToast("삭제되었습니다.");
+    });
+  });
+}
+
+function buildUsageReport() {
+  const list = getFilteredUsage().slice().sort((a, b) =>
+    a.date < b.date ? -1 : 1
+  );
+  const userName = state.user.name || "(이름 미입력)";
+  const period = periodLabel();
+  let mat = 0,
+    act = 0;
+  for (const u of list) {
+    const k = categoryKindOf(u.category);
+    const v = Number(u.amount) || 0;
+    if (k === "material") mat += v;
+    else if (k === "activity") act += v;
+  }
+  const total = mat + act;
+  const SEP = "─".repeat(46);
+
+  let body = `[연구비 사용내역 보고서]\n`;
+  body += `연구원: ${userName}\n`;
+  body += `책임교수: ${FIXED_PROFESSOR_NAME}T\n`;
+  body += `기간: ${period}\n`;
+  body += `${SEP}\n`;
+  if (list.length === 0) {
+    body += "(이 기간에 사용 내역이 없습니다)\n";
+  } else {
+    for (const u of list) {
+      const label = REQUIREMENTS[u.category]?.label || u.category;
+      body +=
+        `${u.date} | ${label} | ${Number(u.amount).toLocaleString("ko-KR")}원` +
+        (u.memo ? `  — ${u.memo}` : "") +
+        `\n`;
+    }
+    body += `${SEP}\n`;
+    body += `[세목별 소계]\n`;
+    body += `· 연구재료비: ${mat.toLocaleString("ko-KR")}원\n`;
+    body += `· 연구활동비: ${act.toLocaleString("ko-KR")}원\n`;
+    body += `${SEP}\n`;
+    body += `[총 합계] ${total.toLocaleString("ko-KR")}원 · ${list.length}건\n`;
+  }
+  return {
+    body,
+    subject: `[연구비 사용내역] ${userName} - ${period}`,
+    list,
+    total,
+    mat,
+    act,
+    period,
+    userName
+  };
+}
+
+async function copyUsageReport() {
+  const { body, list } = buildUsageReport();
+  if (list.length === 0)
+    return showToast("이 기간에 사용 내역이 없습니다.", "danger");
+  try {
+    await navigator.clipboard.writeText(body);
+    showToast("보고서가 클립보드에 복사되었습니다.", "success");
+  } catch {
+    showToast("복사 실패 — 브라우저 권한을 확인해 주세요.", "danger");
+  }
+}
+
+function mailUsageReport() {
+  const { body, subject, list } = buildUsageReport();
+  if (list.length === 0)
+    return showToast("이 기간에 사용 내역이 없습니다.", "danger");
+  const url =
+    `https://mail.google.com/mail/?view=cm&fs=1` +
+    (PROFESSOR_EMAIL ? `&to=${encodeURIComponent(PROFESSOR_EMAIL)}` : "") +
+    `&su=${encodeURIComponent(subject)}` +
+    `&body=${encodeURIComponent(body)}`;
+  window.open(url, "_blank");
+}
+
+function downloadUsageCsv() {
+  const list = getFilteredUsage()
+    .slice()
+    .sort((a, b) => (a.date < b.date ? -1 : 1));
+  if (list.length === 0)
+    return showToast("이 기간에 사용 내역이 없습니다.", "danger");
+  const headers = ["날짜", "세목", "분류", "금액", "메모"];
+  const rows = list.map((u) => {
+    const label = REQUIREMENTS[u.category]?.label || u.category;
+    const kind =
+      categoryKindOf(u.category) === "material"
+        ? "연구재료비"
+        : categoryKindOf(u.category) === "activity"
+          ? "연구활동비"
+          : "";
+    const memo = (u.memo || "").replace(/"/g, '""');
+    const labelCsv = label.replace(/"/g, '""');
+    return [u.date, `"${labelCsv}"`, kind, u.amount || 0, `"${memo}"`].join(",");
+  });
+  const csv = "﻿" + [headers.join(","), ...rows].join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const stamp = todayISO().replace(/-/g, "");
+  const userName = (state.user.name || "사용자").replace(/\s+/g, "_");
+  triggerDownload(blob, `사용내역_${userName}_${stamp}.csv`);
+  showToast("CSV 다운로드 완료", "success");
+}
+
+/* ---------- memo ---------- */
+function initMemo() {
+  $("#memoDate").value = todayISO();
+  $("#addMemo").addEventListener("click", () => {
+    const m = {
+      id: uid(),
+      date: $("#memoDate").value,
+      vendor: $("#memoVendor").value.trim(),
+      amount: Number($("#memoAmount").value) || 0,
+      cardLast4: $("#memoCardLast4").value.trim(),
+      approval: $("#memoApproval").value.trim(),
+      note: $("#memoNote").value.trim()
+    };
+    if (!m.vendor) return showToast("업체명을 입력하세요.", "danger");
+
+    state.memos.push(m);
+    saveJSON(LS_KEYS.memos, state.memos);
+
+    ["memoVendor", "memoAmount", "memoCardLast4", "memoApproval", "memoNote"].forEach(
+      (id) => ($("#" + id).value = "")
+    );
+    showToast("증빙 메모를 추가했습니다.", "success");
+    renderMemos();
+  });
+
+  $("#memoSearch").addEventListener("input", renderMemos);
+}
+
+function renderMemos() {
+  const grid = $("#memoGrid");
+  const q = $("#memoSearch").value.trim().toLowerCase();
+  let list = [...state.memos].sort((a, b) => (a.date < b.date ? 1 : -1));
+  if (q) {
+    list = list.filter((m) =>
+      [m.vendor, m.note, m.approval, m.cardLast4]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase()
+        .includes(q)
+    );
+  }
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1;">${
+      state.memos.length === 0 ? "아직 메모가 없습니다." : "검색 결과가 없습니다."
+    }</div>`;
+    return;
+  }
+
+  grid.innerHTML = list
+    .map(
+      (m) => `
+      <div class="memo-card">
+        <div class="m-row">
+          <span class="m-vendor">${escapeHTML(m.vendor)}</span>
+          <span class="m-amount">${fmt(m.amount)}</span>
+        </div>
+        <div class="m-meta">
+          ${escapeHTML(m.date || "—")}
+          ${m.cardLast4 ? " · 카드 ****" + escapeHTML(m.cardLast4) : ""}
+          ${m.approval ? " · 승인 " + escapeHTML(m.approval) : ""}
+        </div>
+        ${m.note ? `<div class="m-memo">${escapeHTML(m.note)}</div>` : ""}
+        <div class="m-actions">
+          <button class="btn ghost small" data-copy-memo="${m.id}">복사</button>
+          <button class="btn danger small" data-del-memo="${m.id}">삭제</button>
+        </div>
+      </div>`
+    )
+    .join("");
+
+  $$("[data-copy-memo]").forEach((btn) =>
+    btn.addEventListener("click", async () => {
+      const m = state.memos.find((x) => x.id === btn.dataset.copyMemo);
+      if (!m) return;
+      const txt =
+        `${m.date} | ${m.vendor} | ${fmt(m.amount)}` +
+        (m.cardLast4 ? ` | 카드 ****${m.cardLast4}` : "") +
+        (m.approval ? ` | 승인 ${m.approval}` : "") +
+        (m.note ? `\n${m.note}` : "");
+      try {
+        await navigator.clipboard.writeText(txt);
+        showToast("메모가 복사되었습니다.", "success");
+      } catch {
+        showToast("복사에 실패했습니다.", "danger");
+      }
+    })
+  );
+
+  $$("[data-del-memo]").forEach((btn) =>
+    btn.addEventListener("click", () => {
+      if (!confirm("이 메모를 삭제할까요?")) return;
+      state.memos = state.memos.filter((m) => m.id !== btn.dataset.delMemo);
+      saveJSON(LS_KEYS.memos, state.memos);
+      renderMemos();
+      showToast("삭제되었습니다.");
+    })
+  );
+}
+
+/* ---------- modals ---------- */
+function showModal(id) {
+  $("#" + id).classList.add("show");
+}
+function hideModal(id) {
+  $("#" + id).classList.remove("show");
+}
+function initModals() {
+  $$("[data-close]").forEach((b) =>
+    b.addEventListener("click", () => hideModal(b.dataset.close))
+  );
+  $$(".modal-backdrop").forEach((bd) =>
+    bd.addEventListener("click", (e) => {
+      if (e.target === bd) bd.classList.remove("show");
+    })
+  );
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") $$(".modal-backdrop").forEach((m) => m.classList.remove("show"));
+  });
+  $("#btnHelp").addEventListener("click", () => showModal("helpModal"));
+}
+
+/* ---------- export / import ---------- */
+function initBackup() {
+  $("#btnExport").addEventListener("click", () => {
+    const dump = {
+      version: 4,
+      exportedAt: new Date().toISOString(),
+      usage: state.usage,
+      memos: state.memos,
+      analyses: state.analyses,
+      user: state.user
+      // 첨부파일은 IndexedDB에 보관되어 JSON 백업에 포함되지 않습니다.
+    };
+    const blob = new Blob([JSON.stringify(dump, null, 2)], {
+      type: "application/json"
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const stamp = todayISO().replace(/-/g, "");
+    a.href = url;
+    a.download = `연구비_도우미_백업_${stamp}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast("백업 파일을 내려받았습니다.", "success");
+  });
+
+  $("#btnImport").addEventListener("click", () => $("#importFile").click());
+  $("#importFile").addEventListener("change", (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        if (!confirm("기존 데이터를 모두 덮어씁니다. 계속할까요?")) return;
+        state.usage = Array.isArray(data.usage) ? data.usage : [];
+        state.memos = Array.isArray(data.memos) ? data.memos : [];
+        state.analyses =
+          data.analyses && typeof data.analyses === "object" ? data.analyses : {};
+        state.user =
+          data.user && typeof data.user === "object"
+            ? { name: data.user.name || "" }
+            : { name: "" };
+        saveJSON(LS_KEYS.usage, state.usage);
+        saveJSON(LS_KEYS.memos, state.memos);
+        saveJSON(LS_KEYS.analyses, state.analyses);
+        saveJSON(LS_KEYS.user, state.user);
+        renderUsage();
+        renderMemos();
+        renderChecklist();
+        showToast("백업 데이터를 불러왔습니다.", "success");
+      } catch (err) {
+        showToast("올바르지 않은 파일입니다.", "danger");
+      } finally {
+        e.target.value = "";
+      }
+    };
+    reader.readAsText(file, "utf-8");
+  });
+}
+
+/* ---------- boot ---------- */
+async function boot() {
+  populateCategorySelects();
+  initOnboarding();
+  initTabs();
+  initChecklist();
+  initAnalysis();
+  initMailModal();
+  initUsage();
+  initMemo();
+  initModals();
+  initBackup();
+  renderUsage();
+  renderMemos();
+
+  try {
+    await rebuildAttachmentsIndex();
+    renderChecklist();
+  } catch (err) {
+    console.error("IndexedDB 초기화 실패", err);
+    showToast("브라우저 저장소(IndexedDB) 사용이 제한되어 있습니다.", "danger");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", boot);
+</script>
+
+</body>
+</html>
