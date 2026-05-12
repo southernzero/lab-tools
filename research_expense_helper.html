@@ -1279,6 +1279,7 @@
       <div class="note-box" style="margin-bottom:14px;">
         💡 모든 첨부파일을 <strong>A4 한 권의 PDF</strong>로 합쳐 출력 가능하게 만듭니다.
         <br />· <strong>사진</strong> 첨부는 한 페이지에 <strong>6장씩(2×3 그리드)</strong> 자동 배치됩니다.
+        <br />· <strong>견적서·세금계산서·거래명세서·통장사본·사업자등록증</strong>은 1장씩 <strong>페이지 가득</strong> 출력됩니다.
         <br />· <strong>PDF</strong> 첨부는 원본 페이지 그대로 병합됩니다.
         <br />· 표지에는 세목·정산일자·정산금액·사유·연구원/책임교수·항목별 첨부 체크표가 들어갑니다.
         <br />· <strong>정산일자·정산금액</strong>을 입력하면 사용내역 탭과 예산 잔액에 자동 기록됩니다.
@@ -2162,6 +2163,69 @@ async function renderHeaderBandCanvas(itemName, subInfo) {
   ctx.fillText(subInfo, W - 28 * SCALE, H / 2);
 
   return { canvas: c, heightPt: HEADER_H_PT };
+}
+
+/**
+ * 한 장 가득(Full-Page) 출력 대상 항목.
+ * 견적서·세금계산서·거래명세서·통장사본·사업자등록증은 6장/페이지 그리드 대신
+ * 한 장씩 페이지 전체에 크게 출력해야 가독성이 확보됨.
+ */
+const FULL_PAGE_ITEMS = new Set([
+  "견적서",
+  "세금계산서",
+  "거래명세서",
+  "업체 통장사본",
+  "업체 사업자등록증"
+]);
+
+/**
+ * 이미지 1장을 A4 한 페이지 전체에 가득 출력 (헤더 띠 + 큰 이미지).
+ * processFilesGroup에서 FULL_PAGE_ITEMS에 해당하는 itemName일 때 호출.
+ */
+async function addImageFullPage(pdf, opts) {
+  const page = pdf.addPage([A4_W, A4_H]);
+  const totalLabel = opts.totalImages > 1
+    ? `(증빙 ${opts.itemIdx}/${opts.totalCatItems}) · 사진 ${opts.pageIdx}/${opts.totalImages}`
+    : `(증빙 ${opts.itemIdx}/${opts.totalCatItems})`;
+  const { canvas: hdrCanvas, heightPt: HEADER_H } = await renderHeaderBandCanvas(
+    opts.itemName,
+    totalLabel
+  );
+  const hdrBytes = await canvasToPngBytes(hdrCanvas);
+  const hdrImg = await pdf.embedPng(hdrBytes);
+  page.drawImage(hdrImg, {
+    x: 0,
+    y: A4_H - HEADER_H,
+    width: A4_W,
+    height: HEADER_H
+  });
+
+  const M = 18; // 큰 출력이라 좌우 여백 최소화
+  const areaTop = A4_H - HEADER_H - 10;
+  const areaBottom = M;
+  const areaLeft = M;
+  const areaRight = A4_W - M;
+  const areaW = areaRight - areaLeft;
+  const areaH = areaTop - areaBottom;
+
+  try {
+    const img = await embedAnyImage(pdf, opts.image.blob);
+    const imgAR = img.width / img.height;
+    const areaAR = areaW / areaH;
+    let w, h;
+    if (imgAR > areaAR) {
+      w = areaW;
+      h = w / imgAR;
+    } else {
+      h = areaH;
+      w = h * imgAR;
+    }
+    const x = areaLeft + (areaW - w) / 2;
+    const y = areaBottom + (areaH - h) / 2;
+    page.drawImage(img, { x, y, width: w, height: h });
+  } catch (err) {
+    console.warn("이미지 임베드 실패 (full-page):", opts.image?.name, err);
+  }
 }
 
 async function addImageGridPage(pdf, opts) {
@@ -3452,15 +3516,28 @@ async function processFilesGroup(pdf, files, headerOpts) {
   }
 
   if (images.length > 0) {
-    const totalGridPages = Math.ceil(images.length / 6);
-    for (let p = 0; p < images.length; p += 6) {
-      const chunk = images.slice(p, p + 6);
-      await addImageGridPage(pdf, {
-        ...headerOpts,
-        pageIdx: Math.floor(p / 6) + 1,
-        totalGridPages,
-        images: chunk
-      });
+    if (FULL_PAGE_ITEMS.has(headerOpts.itemName)) {
+      // 5종(견적서·세금계산서·거래명세서·통장사본·사업자등록증)은 1장씩 가득 출력
+      for (let p = 0; p < images.length; p++) {
+        await addImageFullPage(pdf, {
+          ...headerOpts,
+          pageIdx: p + 1,
+          totalImages: images.length,
+          image: images[p]
+        });
+      }
+    } else {
+      // 그 외 항목은 기존대로 한 페이지에 6장(2×3) 그리드
+      const totalGridPages = Math.ceil(images.length / 6);
+      for (let p = 0; p < images.length; p += 6) {
+        const chunk = images.slice(p, p + 6);
+        await addImageGridPage(pdf, {
+          ...headerOpts,
+          pageIdx: Math.floor(p / 6) + 1,
+          totalGridPages,
+          images: chunk
+        });
+      }
     }
   }
   for (const rec of pdfRecs) {
