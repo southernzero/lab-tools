@@ -2188,7 +2188,9 @@ const FULL_PAGE_ITEMS = new Set([
   "세금계산서",
   "거래명세서",
   "업체 통장사본",
-  "업체 사업자등록증"
+  "업체 사업자등록증",
+  "학회 브로셔 (포스터 등)",
+  "참가확인증 (또는 명찰 실물 사진)"
 ]);
 
 /**
@@ -2238,6 +2240,58 @@ async function addImageFullPage(pdf, opts) {
     page.drawImage(img, { x, y, width: w, height: h });
   } catch (err) {
     console.warn("이미지 임베드 실패 (full-page):", opts.image?.name, err);
+  }
+}
+
+/**
+ * PDF 원본의 각 페이지를 A4 한 페이지에 가득(비율 유지) 배치한다.
+ * 헤더 띠 아래 영역에 contain 방식으로 최대 크기로 그린다.
+ * 참가확인증(명찰 PDF) 등 FULL_PAGE_ITEMS 에 속한 PDF 첨부에 사용.
+ */
+async function addPdfPagesFullPage(pdf, srcDoc, headerOpts) {
+  const indices = srcDoc.getPageIndices();
+  const embedded = await pdf.embedPdf(srcDoc, indices);
+  for (let p = 0; p < embedded.length; p++) {
+    const ep = embedded[p];
+    const page = pdf.addPage([A4_W, A4_H]);
+    const totalLabel = embedded.length > 1
+      ? `(증빙 ${headerOpts.itemIdx}/${headerOpts.totalCatItems}) · ${p + 1}/${embedded.length}`
+      : `(증빙 ${headerOpts.itemIdx}/${headerOpts.totalCatItems})`;
+    const { canvas: hdrCanvas, heightPt: HEADER_H } = await renderHeaderBandCanvas(
+      headerOpts.itemName,
+      totalLabel
+    );
+    const hdrBytes = await canvasToPngBytes(hdrCanvas);
+    const hdrImg = await pdf.embedPng(hdrBytes);
+    page.drawImage(hdrImg, {
+      x: 0,
+      y: A4_H - HEADER_H,
+      width: A4_W,
+      height: HEADER_H
+    });
+
+    const M = 18;
+    const areaTop = A4_H - HEADER_H - 10;
+    const areaBottom = M;
+    const areaLeft = M;
+    const areaRight = A4_W - M;
+    const areaW = areaRight - areaLeft;
+    const areaH = areaTop - areaBottom;
+
+    const dims = ep.scale(1);
+    const ar = dims.width / dims.height;
+    const areaAR = areaW / areaH;
+    let w, h;
+    if (ar > areaAR) {
+      w = areaW;
+      h = w / ar;
+    } else {
+      h = areaH;
+      w = h * ar;
+    }
+    const x = areaLeft + (areaW - w) / 2;
+    const y = areaBottom + (areaH - h) / 2;
+    page.drawPage(ep, { x, y, width: w, height: h });
   }
 }
 
@@ -3557,8 +3611,13 @@ async function processFilesGroup(pdf, files, headerOpts) {
     try {
       const buf = await rec.blob.arrayBuffer();
       const ext = await PDFDocument.load(buf, { ignoreEncryption: true });
-      const copied = await pdf.copyPages(ext, ext.getPageIndices());
-      copied.forEach((p) => pdf.addPage(p));
+      if (FULL_PAGE_ITEMS.has(headerOpts.itemName)) {
+        // 참가확인증 등: PDF 페이지를 A4 한 장에 가득(비율 유지) 배치
+        await addPdfPagesFullPage(pdf, ext, headerOpts);
+      } else {
+        const copied = await pdf.copyPages(ext, ext.getPageIndices());
+        copied.forEach((p) => pdf.addPage(p));
+      }
     } catch (err) {
       console.warn("PDF 병합 실패:", rec.name, err);
       await addNotePage(pdf, [
