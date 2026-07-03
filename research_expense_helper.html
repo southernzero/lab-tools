@@ -2527,6 +2527,15 @@ function loadHtml2Canvas() {
   return _h2cLoadPromise;
 }
 
+/* 한글 PDF(비내장 CID 폰트, 예: HWP·세금계산서·분석의뢰서)는 cMap·표준폰트 데이터가
+   없으면 pdf.js가 글자를 조용히 누락시켜 표 테두리만 남는다 — 반드시 함께 전달 */
+const PDFJS_DOC_OPTS = {
+  cMapUrl: "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/cmaps/",
+  cMapPacked: true,
+  standardFontDataUrl:
+    "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/standard_fonts/"
+};
+
 let _pdfjsLoadPromise = null;
 function loadPdfJs() {
   if (window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
@@ -2549,7 +2558,7 @@ function loadPdfJs() {
 async function renderPdfFirstPageAsCanvas(blob, scale = 1.5) {
   await loadPdfJs();
   const buf = await blob.arrayBuffer();
-  const doc = await window.pdfjsLib.getDocument({ data: buf }).promise;
+  const doc = await window.pdfjsLib.getDocument({ data: buf, ...PDFJS_DOC_OPTS }).promise;
   const page = await doc.getPage(1);
   const viewport = page.getViewport({ scale });
   const canvas = document.createElement("canvas");
@@ -2886,7 +2895,7 @@ async function handleAnalysisSheetMultiUpload(files) {
 async function parsePdfAnalysisSheet(blob) {
   await loadPdfJs();
   const buf = await blob.arrayBuffer();
-  const doc = await window.pdfjsLib.getDocument({ data: buf }).promise;
+  const doc = await window.pdfjsLib.getDocument({ data: buf, ...PDFJS_DOC_OPTS }).promise;
 
   const allLines = [];
   for (let p = 1; p <= doc.numPages; p++) {
@@ -3964,7 +3973,7 @@ async function extractInvoiceDateFromBlob(blob, filename) {
   if (!isPdf) return "";
   await loadPdfJs();
   const buf = await blob.arrayBuffer();
-  const doc = await window.pdfjsLib.getDocument({ data: buf }).promise;
+  const doc = await window.pdfjsLib.getDocument({ data: buf, ...PDFJS_DOC_OPTS }).promise;
   let allText = "";
   const numPages = Math.min(doc.numPages, 2); // 발행일은 보통 1페이지에 있음
   for (let p = 1; p <= numPages; p++) {
